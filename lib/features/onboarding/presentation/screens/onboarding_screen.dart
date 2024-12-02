@@ -14,8 +14,8 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
-  int _currentPage = 0;  // Initially, the first page is active
-  bool _isButtonDisabled = false;  // Prevent multiple presses
+  int _currentPage = 0;
+  bool _isButtonDisabled = false;
 
   Map<String, String> _localizedStrings = {};
 
@@ -32,22 +32,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
   }
 
-  // Handle page changes in PageView
   void _onPageChanged(int page) {
     setState(() {
       _currentPage = page;
     });
   }
 
-  // Navigate to the next page
   void _nextPage(List<OnboardingModel> onboardingData) {
     print("Current Page: $_currentPage");
     if (_currentPage < onboardingData.length - 1) {
-      _pageController.animateToPage(
+      _pageController
+          .animateToPage(
         _currentPage + 1,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-      ).then((_) {
+      )
+          .then((_) {
         setState(() {
           _currentPage += 1;
         });
@@ -57,7 +57,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       Navigator.pushReplacementNamed(context, "/home");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         onboardingData: onboardingData[index],
                       );
                     },
-                    onPageChanged: _onPageChanged,  // Listen for page changes
+                    onPageChanged: _onPageChanged,
                   ),
                 ),
                 SizedBox(height: SizeUtils.getHeight(context, 0.03)),
@@ -102,7 +101,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           : SizeUtils.getWidth(context, 0.02),
                       height: SizeUtils.getHeight(context, 0.01),
                       decoration: BoxDecoration(
-                        color: _currentPage == index ? Colors.blue : Colors.grey,
+                        color:
+                            _currentPage == index ? Colors.blue : Colors.grey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     );
@@ -117,26 +117,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPressed: _isButtonDisabled
                           ? null
                           : () {
-                        setState(() {
-                          _isButtonDisabled = true;
-                        });
-                        // Call the method to handle page change
-                        _nextPage(onboardingData);
-                        // Re-enable button after animation duration
-                        Future.delayed(const Duration(milliseconds: 350), () {
-                          setState(() {
-                            _isButtonDisabled = false;
-                          });
-                        });
-                      },
+                              setState(() {
+                                _isButtonDisabled = true;
+                              });
+                              _nextPage(onboardingData);
+                              Future.delayed(const Duration(milliseconds: 350),
+                                  () {
+                                setState(() {
+                                  _isButtonDisabled = false;
+                                });
+                              });
+                            },
                       child: Text(
                         _currentPage == onboardingData.length - 1
                             ? _localizedStrings['get_started'] ?? "Get Started"
                             : _localizedStrings['next'] ?? "Next",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                   ),
