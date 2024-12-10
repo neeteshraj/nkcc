@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:support/config/routes/routes.dart';
 import 'package:support/core/constants/app_constants.dart';
 import 'package:support/core/localization/localization.dart';
@@ -7,12 +8,15 @@ import 'package:support/core/utils/locale_utils.dart';
 import 'package:support/core/theme/app_theme.dart';
 
 import 'features/onboarding/presentation/bloc/onboarding_cubit.dart';
-import 'init_dependencies.dart';
+import 'core/dependency/init_dependencies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
 
   await initDependencies();
+  FlutterNativeSplash.remove();
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<OnboardingCubit>(
