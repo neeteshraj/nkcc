@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/core/utils/translation_utils.dart';
 import 'package:support/features/onboarding/data/datasources/onboarding_data_source.dart';
@@ -99,7 +100,7 @@ class OnboardingScreen extends StatelessWidget {
                             SizedBox(height: SizeUtils.getHeight(context, 0.03)),
                             Padding(
                               padding:
-                              SizeUtils.getPadding(context, 0, 0.1),
+                              SizeUtils.getPadding(context, 0, 0.05),
                               child: SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
@@ -107,6 +108,11 @@ class OnboardingScreen extends StatelessWidget {
                                     cubit.nextPage(
                                         state.index, onboardingData.length);
                                   },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.buttonBackground,
+                                    elevation: 0,
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0)
+                                  ),
                                   child: Text(
                                     state.index == onboardingData.length - 1
                                         ? translations['get_started'] ??
