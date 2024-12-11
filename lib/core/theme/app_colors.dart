@@ -20,4 +20,8 @@ class AppColors {
   static const Color warningColor = Color(0xFFFFC107);
 
   static const Color customColor = Color(0xFF8BC34A);
+
+  static const Color backgroundColor = Color(0xFF0D131C);
+
+  static const Color buttonBackground = Color(0xFF5A63F6);
 }

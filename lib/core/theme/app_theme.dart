@@ -21,6 +21,10 @@ class AppTheme {
         fontSize: 16,
         color: Colors.black87,
       ),
+      bodySmall: TextStyle(
+        fontSize: 16,
+        color: Colors.red
+      )
     ),
     buttonTheme: const ButtonThemeData(
       buttonColor: Colors.blue,
