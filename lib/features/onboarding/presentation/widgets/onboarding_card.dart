@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/features/onboarding/data/models/onboarding_model.dart';
 
@@ -11,13 +10,14 @@ class OnboardingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: SizeUtils.getPadding(context, 0.05, 0.05),
+      padding: SizeUtils.getPadding(context, 0.03, 0.07), // Reduced vertical padding
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: SizeUtils.getHeight(context, 0.4),
-            child: SvgPicture.asset(
+            height: SizeUtils.getHeight(context, 0.12),
+            width: SizeUtils.getWidth(context, 0.4),
+            child: Image.asset(
               onboardingData.imagePath,
               fit: BoxFit.contain,
             ),
@@ -25,7 +25,7 @@ class OnboardingCard extends StatelessWidget {
           SizedBox(height: SizeUtils.getHeight(context, 0.03)),
           Text(
             onboardingData.title,
-            style: Theme.of(context).textTheme.displayLarge,
+            style: Theme.of(context).textTheme.headlineLarge,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: SizeUtils.getHeight(context, 0.02)),

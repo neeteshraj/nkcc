@@ -5,12 +5,13 @@ class AppTheme {
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
     scaffoldBackgroundColor: Colors.white,
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter',
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
-        fontSize: 96,
+        fontFamily: 'BebasNeue',
+        fontSize: 48,
         fontWeight: FontWeight.bold,
-        color: Colors.black,
+        color: Colors.white,
       ),
       displayLarge: TextStyle(
         fontSize: 32,
@@ -18,13 +19,13 @@ class AppTheme {
         color: Colors.black,
       ),
       bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.black87,
+        fontSize: 18,
+        color: Colors.white,
       ),
       bodySmall: TextStyle(
         fontSize: 16,
-        color: Colors.red
-      )
+        color: Colors.red,
+      ),
     ),
     buttonTheme: const ButtonThemeData(
       buttonColor: Colors.blue,
@@ -36,12 +37,13 @@ class AppTheme {
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
     scaffoldBackgroundColor: Colors.white,
-    fontFamily: 'Poppins',
+    fontFamily: 'Inter',
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
-        fontSize: 96,
+        fontFamily: 'BebasNeue',
+        fontSize: 48,
         fontWeight: FontWeight.bold,
-        color: Colors.black,
+        color: Colors.white,
       ),
       displayLarge: TextStyle(
         fontSize: 32,
@@ -49,8 +51,8 @@ class AppTheme {
         color: Colors.black,
       ),
       bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Colors.black87,
+        fontSize: 18,
+        color: Colors.white,
       ),
     ),
     buttonTheme: const ButtonThemeData(

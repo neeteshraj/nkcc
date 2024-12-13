@@ -17,17 +17,7 @@ class OnboardingDataSource {
         OnboardingModel(
           title: jsonMap['onboarding_title_1'],
           description: jsonMap['onboarding_description_1'],
-          imagePath: ImagesPaths.onboarding1,
-        ),
-        OnboardingModel(
-          title: jsonMap['onboarding_title_2'],
-          description: jsonMap['onboarding_description_2'],
-          imagePath: ImagesPaths.onboarding2,
-        ),
-        OnboardingModel(
-          title: jsonMap['onboarding_title_3'],
-          description: jsonMap['onboarding_description_3'],
-          imagePath: ImagesPaths.onboarding3,
+          imagePath: ImagesPaths.onboardingImage,
         ),
       ];
     } catch (e) {
