@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class QRCodeScreen extends StatefulWidget {
   const QRCodeScreen({Key? key}) : super(key: key);
@@ -10,98 +10,155 @@ class QRCodeScreen extends StatefulWidget {
 }
 
 class _QRCodeScreenState extends State<QRCodeScreen> {
-  final String qrData = "https://example.com";
-  String scanResult = "";
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  bool isFlashOn = false;
+  bool hasPermission = false;
+  MobileScannerController cameraController = MobileScannerController();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("QR Code Screen"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              "Generated QR Code",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            // Ensure QrImage is rendered properly in the widget tree
-            QrImageView(
-              data: qrData,
-              size: 200.0,
-              version: QrVersions.auto,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const QRCodeScannerScreen(),
-                  ),
-                );
-                if (result != null) {
-                  setState(() {
-                    scanResult = result;
-                  });
-                }
-              },
-              child: const Text("Scan QR Code"),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              "Scan Result: $scanResult",
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    _checkCameraPermission();
   }
-}
 
-class QRCodeScannerScreen extends StatefulWidget {
-  const QRCodeScannerScreen({Key? key}) : super(key: key);
+  Future<void> _checkCameraPermission() async {
+    final status = await Permission.camera.status;
+    print('Current Camera Permission Status: $status');
 
-  @override
-  State<QRCodeScannerScreen> createState() => _QRCodeScannerScreenState();
-}
+    if (status.isGranted) {
+      setState(() => hasPermission = true);
+      print('Camera permission already granted');
+    } else if (status.isDenied) {
+      final result = await Permission.camera.request();
+      print('Requested Camera Permission: $result');
 
-class _QRCodeScannerScreenState extends State<QRCodeScannerScreen> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
+      if (result.isGranted) {
+        setState(() => hasPermission = true);
+        print('Camera permission granted');
+      } else {
+        print('Camera permission denied');
+        _showPermissionDialog();
+      }
+    } else if (status.isPermanentlyDenied) {
+      print('Camera permission permanently denied');
+      _showPermissionDialog();
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Scan QR Code"),
-        centerTitle: true,
-      ),
-      body: QRView(
-        key: qrKey,
-        onQRViewCreated: _onQRViewCreated,
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Camera Permission'),
+        content: const Text(
+            'Camera permission is required to scan QR codes. Please enable it in settings.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => openAppSettings(),
+            child: const Text('Settings'),
+          ),
+        ],
       ),
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      Navigator.pop(context, scanData.code); // Return scanned QR code
-      controller.dispose();
+  void _toggleFlash() async {
+    setState(() {
+      isFlashOn = !isFlashOn;
     });
+    await cameraController.toggleTorch();
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    cameraController.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: hasPermission
+          ? Stack(
+        children: [
+          MobileScanner(
+            controller: cameraController,
+            onDetect: (BarcodeCapture barcodeCapture) {
+              print("Detected object: ${barcodeCapture.barcodes.first.rawValue}");
+              cameraController.stop();
+              Navigator.pop(context, barcodeCapture.barcodes.first.rawValue);
+            },
+          ),
+
+          Positioned(
+            top: 60,
+            left: 16,
+            right: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+
+                // Title
+                const Text(
+                  'Scan Barcode',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                // Flash Toggle Icon
+                IconButton(
+                  icon: Icon(
+                    isFlashOn ? Icons.flash_off : Icons.flash_on,
+                    color: Colors.white,
+                  ),
+                  onPressed: _toggleFlash,
+                ),
+              ],
+            ),
+          ),
+
+          // Scan Instructions
+          Positioned(
+            bottom: 150,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(
+              child: Text(
+                'Align the QR code within the frame.',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+
+          // Scan Indicator Icon
+          Positioned(
+            bottom: 60,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(
+              child: CircleAvatar(
+                radius: 28,
+                backgroundColor: Colors.blueAccent,
+                child: Icon(Icons.qr_code_scanner,
+                    color: Colors.white, size: 32),
+              ),
+            ),
+          ),
+        ],
+      )
+          : const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }

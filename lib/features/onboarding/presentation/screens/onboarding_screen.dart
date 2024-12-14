@@ -168,69 +168,72 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                                 borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
                                               ),
                                               builder: (context) {
-                                                return Container(
-                                                  width: MediaQuery.of(context).size.width,
-                                                  padding: const EdgeInsets.all(30.0),
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Text(
-                                                            translations['enter_product_code'] ?? "Enter Product Code",
-                                                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: SizeUtils.getHeight(context, 0.02)),
-                                                        const TextField(
-                                                          decoration: InputDecoration(
-                                                            hintText: "6 digit code on bill",
-                                                            hintStyle: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
-                                                            filled: true,
-                                                            fillColor: AppColors.backgroundColor,
-                                                            border: InputBorder.none,
-                                                            focusedBorder: UnderlineInputBorder(
-                                                              borderSide: BorderSide(color: Colors.white),
-                                                            ),
-                                                            enabledBorder: UnderlineInputBorder(
-                                                              borderSide: BorderSide(color: Colors.white54),
-                                                            ),
-                                                            contentPadding: EdgeInsets.symmetric(vertical: 18.0),
-                                                          ),
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                            letterSpacing: 1.5,
-                                                            fontSize: 18,
-                                                            fontWeight: FontWeight.w600
-                                                          ),
-                                                          cursorColor: Colors.white,
-                                                        ),
-                                                        SizedBox(height: SizeUtils.getHeight(context, 0.02)),
-                                                        SizedBox(
-                                                          width: double.infinity,
-                                                          child: ElevatedButton(
-                                                            onPressed: () {
-                                                              // Action when button is pressed
-                                                            },
-                                                            style: ElevatedButton.styleFrom(
-                                                              backgroundColor: AppColors.buttonBackground,
-                                                              padding: const EdgeInsets.symmetric(vertical: 15.0),
-                                                            ),
+                                                return Padding(
+                                                  padding: MediaQuery.of(context).viewInsets,
+                                                  child: Container(
+                                                    width: MediaQuery.of(context).size.width,
+                                                    padding: const EdgeInsets.all(30.0),
+                                                    child: SingleChildScrollView(
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Align(
+                                                            alignment: Alignment.centerLeft,
                                                             child: Text(
-                                                              translations["continue"] ?? "Continue",
-                                                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                                color: Colors.black,
-                                                                fontWeight: FontWeight.w600,
+                                                              translations['enter_product_code'] ?? "Enter Product Code",
+                                                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                                                color: Colors.white,
+                                                                fontWeight: FontWeight.bold,
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        SizedBox(height: SizeUtils.getHeight(context, 0.01)),
-                                                      ],
+                                                          SizedBox(height: SizeUtils.getHeight(context, 0.02)),
+                                                          const TextField(
+                                                            decoration: InputDecoration(
+                                                              hintText: "6 digit code on bill",
+                                                              hintStyle: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
+                                                              filled: true,
+                                                              fillColor: AppColors.backgroundColor,
+                                                              border: InputBorder.none,
+                                                              focusedBorder: UnderlineInputBorder(
+                                                                borderSide: BorderSide(color: Colors.white),
+                                                              ),
+                                                              enabledBorder: UnderlineInputBorder(
+                                                                borderSide: BorderSide(color: Colors.white54),
+                                                              ),
+                                                              contentPadding: EdgeInsets.symmetric(vertical: 18.0),
+                                                            ),
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                letterSpacing: 1.5,
+                                                                fontSize: 18,
+                                                                fontWeight: FontWeight.w600
+                                                            ),
+                                                            cursorColor: Colors.white,
+                                                          ),
+                                                          SizedBox(height: SizeUtils.getHeight(context, 0.02)),
+                                                          SizedBox(
+                                                            width: double.infinity,
+                                                            child: ElevatedButton(
+                                                              onPressed: () {
+                                                                // Action when button is pressed
+                                                              },
+                                                              style: ElevatedButton.styleFrom(
+                                                                backgroundColor: AppColors.buttonBackground,
+                                                                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                                              ),
+                                                              child: Text(
+                                                                translations["continue"] ?? "Continue",
+                                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                                  color: Colors.black,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: SizeUtils.getHeight(context, 0.01)),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 );
