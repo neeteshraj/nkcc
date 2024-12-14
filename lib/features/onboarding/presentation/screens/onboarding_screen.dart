@@ -4,11 +4,12 @@ import 'package:support/core/constants/videos_path.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/core/utils/translation_utils.dart';
+import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:support/features/onboarding/presentation/widgets/onboarding_card.dart';
 import 'package:video_player/video_player.dart';
 import 'package:support/features/onboarding/data/datasources/onboarding_data_source.dart';
 import 'package:support/features/onboarding/data/models/onboarding_model.dart';
-import '../bloc/onboarding_cubit.dart';
-import '../widgets/onboarding_card.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -43,6 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+
     return BlocProvider(
       create: (_) => OnboardingCubit(),
       child: FutureBuilder<Map<String, String>>(
@@ -59,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           } else {
             final translations = snapshot.data!;
             return FutureBuilder<List<OnboardingModel>>(
-              future: OnboardingDataSource.getOnboardingData(context),
+              future: OnboardingDataSource.getOnboardingData(locale),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Scaffold(
@@ -68,7 +71,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 } else if (snapshot.hasError) {
                   return Scaffold(
                     body: Center(
-                        child: Text('Error loading data: ${snapshot.error}')),
+                      child: Text('Error loading data: ${snapshot.error}'),
+                    ),
                   );
                 } else {
                   final onboardingData = snapshot.data!;
@@ -77,8 +81,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   return BlocConsumer<OnboardingCubit, OnboardingState>(
                     listener: (context, state) {
                       if (state is OnboardingComplete) {
-                        Navigator.pushReplacementNamed(context, "/home");
+                        Navigator.pushNamed(context, "/qrcode");
                       } else if (state is OnboardingIndexChange) {
+                        Navigator.pushNamed(context, "/qrcode");
                         pageController.jumpToPage(state.index);
                       }
                     },
@@ -86,8 +91,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       final cubit = context.read<OnboardingCubit>();
 
                       return Scaffold(
+                        resizeToAvoidBottomInset: true, // Ensures that the body resizes when the keyboard appears
                         body: Stack(
                           children: [
+                            // Background video and overlay
                             if (_videoController.value.isInitialized)
                               SizedBox.expand(
                                 child: FittedBox(
@@ -102,6 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             Container(
                               color: Colors.black.withOpacity(0.6),
                             ),
+                            // Bottom sheet and other content
                             Positioned(
                               bottom: 0,
                               left: 0,
@@ -110,7 +118,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SizedBox(
-                                    height: SizeUtils.getHeight(context, 0.43),
+                                    height: SizeUtils.getHeight(context, 0.44),
                                     child: PageView.builder(
                                       controller: pageController,
                                       itemCount: onboardingData.length,
@@ -134,16 +142,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                           width: double.infinity,
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              // cubit.nextPage(state.index, onboardingData.length);
+                                              cubit.nextPage(state.index, onboardingData.length);
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: AppColors.buttonBackground,
                                               padding: const EdgeInsets.symmetric(vertical: 15.0),
                                             ),
                                             child: Text(
-                                              state.index == onboardingData.length - 1
-                                                  ? translations['scan_to_add_product'] ?? "Scan to Add Product"
-                                                  : translations['next'] ?? "Next",
+                                              translations['scan_to_add_product'] ?? "Scan to Add Product",
                                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
@@ -164,31 +170,68 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                               builder: (context) {
                                                 return Container(
                                                   width: MediaQuery.of(context).size.width,
-                                                  padding: SizeUtils.getPadding(context, 0.03, 0.03),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: double.infinity,
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            // Action when button is pressed
-                                                          },
-                                                          style: ElevatedButton.styleFrom(
-                                                            backgroundColor: AppColors.buttonBackground,
-                                                            padding: const EdgeInsets.symmetric(vertical: 15.0),
-                                                          ),
+                                                  padding: const EdgeInsets.all(30.0),
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Align(
+                                                          alignment: Alignment.centerLeft,
                                                           child: Text(
-                                                            translations["continue"] ?? "Continue",
-                                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.normal,
+                                                            translations['enter_product_code'] ?? "Enter Product Code",
+                                                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.bold,
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      SizedBox(height: SizeUtils.getHeight(context, 0.01)),
-                                                    ],
+                                                        SizedBox(height: SizeUtils.getHeight(context, 0.02)),
+                                                        const TextField(
+                                                          decoration: InputDecoration(
+                                                            hintText: "6 digit code on bill",
+                                                            hintStyle: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
+                                                            filled: true,
+                                                            fillColor: AppColors.backgroundColor,
+                                                            border: InputBorder.none,
+                                                            focusedBorder: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Colors.white),
+                                                            ),
+                                                            enabledBorder: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Colors.white54),
+                                                            ),
+                                                            contentPadding: EdgeInsets.symmetric(vertical: 18.0),
+                                                          ),
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                            letterSpacing: 1.5,
+                                                            fontSize: 18,
+                                                            fontWeight: FontWeight.w600
+                                                          ),
+                                                          cursorColor: Colors.white,
+                                                        ),
+                                                        SizedBox(height: SizeUtils.getHeight(context, 0.02)),
+                                                        SizedBox(
+                                                          width: double.infinity,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              // Action when button is pressed
+                                                            },
+                                                            style: ElevatedButton.styleFrom(
+                                                              backgroundColor: AppColors.buttonBackground,
+                                                              padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                                            ),
+                                                            child: Text(
+                                                              translations["continue"] ?? "Continue",
+                                                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                                color: Colors.black,
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: SizeUtils.getHeight(context, 0.01)),
+                                                      ],
+                                                    ),
                                                   ),
                                                 );
                                               },

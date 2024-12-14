@@ -1,16 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:support/core/constants/images_paths.dart';
 import 'dart:convert';
 import 'package:support/features/onboarding/data/models/onboarding_model.dart';
 
 class OnboardingDataSource {
-  static Future<List<OnboardingModel>> getOnboardingData(
-      BuildContext context) async {
+  static Future<List<OnboardingModel>> getOnboardingData(String locale) async {
     try {
-      final locale = Localizations.localeOf(context).languageCode;
-      final jsonString =
-          await rootBundle.loadString('assets/lang/$locale.json');
+      final jsonString = await rootBundle.loadString('assets/lang/$locale.json');
       final jsonMap = json.decode(jsonString);
 
       return [

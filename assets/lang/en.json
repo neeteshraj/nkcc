@@ -13,5 +13,6 @@
     "findShelter":"Find Shelter",
     "scan_to_add_product": "Scan to Add Product",
     "enter_code_to_add_product": "Enter code to Add product",
-    "continue": "Continue"
+    "continue": "Continue",
+    "6DigitsOnBill": "6 digit code on bill"
 }

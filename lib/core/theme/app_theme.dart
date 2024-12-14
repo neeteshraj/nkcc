@@ -13,6 +13,12 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
+      headlineMedium: const TextStyle(
+        fontFamily: "BebasNeue",
+        fontSize:24,
+        fontWeight: FontWeight.bold,
+        color: Colors.white
+      ),
       displayLarge: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
@@ -44,6 +50,12 @@ class AppTheme {
         fontSize: 48,
         fontWeight: FontWeight.bold,
         color: Colors.white,
+      ),
+      headlineMedium: const TextStyle(
+          fontFamily: "BebasNeue",
+          fontSize:24,
+          fontWeight: FontWeight.bold,
+          color: Colors.white
       ),
       displayLarge: TextStyle(
         fontSize: 32,
