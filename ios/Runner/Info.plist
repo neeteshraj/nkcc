@@ -47,5 +47,9 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+
+		<!-- Camera Permission -->
+		<key>NSCameraUsageDescription</key>
+		<string>We need access to your camera to scan QR codes.</string>
 	</dict>
 </plist>
