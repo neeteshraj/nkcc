@@ -11,7 +11,7 @@ import '../bloc/onboarding_cubit.dart';
 import '../widgets/onboarding_card.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
@@ -25,7 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.initState();
     _videoController = VideoPlayerController.asset(VideoPaths.splashScreen)
       ..initialize().then((_) {
-        setState(() {}); // Update the UI once the video is loaded
+        setState(() {});
         _videoController.setLooping(true);
         _videoController.play();
       });
@@ -88,7 +88,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       return Scaffold(
                         body: Stack(
                           children: [
-                            // Video Background
                             if (_videoController.value.isInitialized)
                               SizedBox.expand(
                                 child: FittedBox(
@@ -100,7 +99,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   ),
                                 ),
                               ),
-                            // Semi-transparent Overlay
                             Container(
                               color: Colors.black.withOpacity(0.6),
                             ),
@@ -111,9 +109,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // PageView for Onboarding Cards
                                   SizedBox(
-                                    height: SizeUtils.getHeight(context, 0.42),
+                                    height: SizeUtils.getHeight(context, 0.43),
                                     child: PageView.builder(
                                       controller: pageController,
                                       itemCount: onboardingData.length,
@@ -128,7 +125,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     ),
                                   ),
                                   SizedBox(height: SizeUtils.getHeight(context, 0.03)),
-                                  // Action Button
                                   Padding(
                                     padding: SizeUtils.getPadding(context, 0, 0.03),
                                     child: Column(
@@ -151,7 +147,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 18
                                               ),
                                             ),
                                           ),
@@ -167,7 +162,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                                 borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
                                               ),
                                               builder: (context) {
-                                                return Padding(
+                                                return Container(
+                                                  width: MediaQuery.of(context).size.width,
                                                   padding: SizeUtils.getPadding(context, 0.03, 0.03),
                                                   child: Column(
                                                     mainAxisSize: MainAxisSize.min,
@@ -187,12 +183,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                                               color: Colors.black,
                                                               fontWeight: FontWeight.normal,
-                                                              fontSize: 18
                                                             ),
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(height: SizeUtils.getHeight(context, 0.01))
+                                                      SizedBox(height: SizeUtils.getHeight(context, 0.01)),
                                                     ],
                                                   ),
                                                 );
@@ -204,7 +199,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 18
                                             ),
                                           ),
                                         ),

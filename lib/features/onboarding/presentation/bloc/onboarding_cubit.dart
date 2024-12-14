@@ -13,7 +13,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     if (currentIndex < totalPages - 1) {
       emit(OnboardingIndexChange(currentIndex + 1));
     } else {
-      emit(OnboardingComplete());
+      emit(const OnboardingComplete());
     }
   }
 }

@@ -19,7 +19,7 @@ class AppTheme {
         color: Colors.black,
       ),
       bodyLarge: TextStyle(
-        fontSize: 18,
+        fontSize: 16,
         color: Colors.white,
       ),
       bodySmall: TextStyle(
@@ -51,7 +51,7 @@ class AppTheme {
         color: Colors.black,
       ),
       bodyLarge: TextStyle(
-        fontSize: 18,
+        fontSize: 16,
         color: Colors.white,
       ),
     ),

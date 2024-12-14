@@ -10,11 +10,11 @@ class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return MaterialPageRoute(builder: (context) => HomeScreen());
+        return MaterialPageRoute(builder: (context) => const HomeScreen());
       case onboarding:
         return MaterialPageRoute(builder: (context) => const OnboardingScreen());
       default:
-        return MaterialPageRoute(builder: (context) => NotFoundScreen());
+        return MaterialPageRoute(builder: (context) => const NotFoundScreen());
     }
   }
 }
