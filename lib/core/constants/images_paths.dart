@@ -8,4 +8,5 @@ class ImagesPaths {
   static const String scanIcon = "assets/images/scan_icon.png";
   static const String settings = "assets/images/settings.png";
   static const String arrowLeft = "assets/images/arrow_left.png";
+  static const String arrowBack = "assets/images/arrow_back.png";
 }

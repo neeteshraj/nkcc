@@ -97,9 +97,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                   return BlocConsumer<OnboardingCubit, OnboardingState>(
                     listener: (context, state) {
                       if (state is OnboardingComplete) {
-                        Navigator.pushNamed(context, "/qrcode");
+                        Navigator.pushNamed(context, "/createaccount");
                       } else if (state is OnboardingIndexChange) {
-                        Navigator.pushNamed(context, "/qrcode");
+                        Navigator.pushNamed(context, "/createaccount");
                         pageController.jumpToPage(state.index);
                       }
                     },
@@ -107,10 +107,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                       final cubit = context.read<OnboardingCubit>();
 
                       return Scaffold(
-                        resizeToAvoidBottomInset: true, // Ensures that the body resizes when the keyboard appears
+                        resizeToAvoidBottomInset: true,
                         body: Stack(
                           children: [
-                            // Background video and overlay
                             if (_videoController.value.isInitialized)
                               SizedBox.expand(
                                 child: FittedBox(

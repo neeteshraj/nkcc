@@ -70,7 +70,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> with SingleTickerProviderSt
           ? Stack(
         children: [
           CameraScanner(
-            controller: cameraController, // Only pass the controller here
+            controller: cameraController,
           ),
           Positioned.fill(
             child: ColorFiltered(

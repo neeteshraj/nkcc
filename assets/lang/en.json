@@ -17,5 +17,15 @@
     "6DigitsOnBill": "6 digit code on bill",
     "scanBarcode": "Scan Barcode",
     "scanQRCode": "Scan QRCode",
-    "alignTheQR": "Align the QR code within the frame."
+    "alignTheQR": "Align the QR code within the frame.",
+    "letsCreateAccount": "Let's create your account",
+    "createAccountDescription": "Create an account to manage your products and services",
+    "enterFullName": "Enter your full name",
+    "enterEmailAddress": "Enter your email address",
+    "password": "Create a strong password",
+    "agreeTo": "I agree to NKCC's",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and",
+    "termsOfUse": "Terms of Use",
+    "complete": "Complete"
 }
