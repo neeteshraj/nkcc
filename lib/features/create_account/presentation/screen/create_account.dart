@@ -17,27 +17,30 @@ class CreateAccountScreen extends StatelessWidget {
       body: Stack(
         children: [
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const TranslatedText(translationKey: 'letsCreateAccount'),
-                SizedBox(height: SizeUtils.getHeight(context, 0.03)),
-                const DescriptionWidget(),
-                SizedBox(height: SizeUtils.getHeight(context, 0.03)),
-                const TextInputFieldsWidget(),
-                SizedBox(height: SizeUtils.getHeight(context, 0.03)),
-                const PrivacyPolicyCheckbox(),
-                SizedBox(height: SizeUtils.getHeight(context, 0.03)),
-                Padding(
-                  padding: EdgeInsets.only(top: SizeUtils.getHeight(context, 0.1)),
-                  child: ContinueButton(
-                    onPressed: () {
-                      print("Continue button pressed!");
-                    },
+            child: Padding(
+              padding: EdgeInsets.only(top: SizeUtils.getHeight(context, 0.05)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const TranslatedText(translationKey: 'letsCreateAccount'),
+                  SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                  const DescriptionWidget(),
+                  SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                  const TextInputFieldsWidget(),
+                  SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                  const PrivacyPolicyCheckbox(),
+                  SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                  Padding(
+                    padding: EdgeInsets.only(top: SizeUtils.getHeight(context, 0.1)),
+                    child: ContinueButton(
+                      onPressed: () {
+                        print("Continue button pressed!");
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const CustomAppBar(),

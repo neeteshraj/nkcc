@@ -97,9 +97,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                   return BlocConsumer<OnboardingCubit, OnboardingState>(
                     listener: (context, state) {
                       if (state is OnboardingComplete) {
-                        Navigator.pushNamed(context, "/createaccount");
+                        Navigator.pushNamed(context, "/qrcode");
                       } else if (state is OnboardingIndexChange) {
-                        Navigator.pushNamed(context, "/createaccount");
+                        Navigator.pushNamed(context, "/qrcode");
                         pageController.jumpToPage(state.index);
                       }
                     },

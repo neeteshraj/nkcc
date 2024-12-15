@@ -12,9 +12,13 @@ class PrivacyPolicyCheckbox extends StatefulWidget {
 class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> {
   bool _isChecked = false;
 
-  void _onPrivacyPolicyTap() {}
+  void _onPrivacyPolicyTap() {
+    Navigator.pushNamed(context, "/privacy_policy");
+  }
 
-  void _onTermsOfUseTap() {}
+  void _onTermsOfUseTap() {
+    Navigator.pushNamed(context, "/terms_of_use");
+  }
 
   Future<Map<String, String>> _loadTranslations(BuildContext context) async {
     return await loadTranslations(context);
@@ -26,7 +30,8 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> {
       fontSize: 16,
       fontWeight: FontWeight.w300,
       color: Colors.white,
-    ) ?? const TextStyle(fontSize: 16);
+    ) ??
+        const TextStyle(fontSize: 16);
 
     const TextStyle linkStyle = TextStyle(
       fontSize: 16,
@@ -36,15 +41,31 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> {
       decorationColor: Colors.white,
     );
 
+    const double widgetHeight = 56;
+
     return FutureBuilder<Map<String, String>>(
       future: _loadTranslations(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: SizedBox(
+              height: widgetHeight,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
         }
 
         if (!snapshot.hasData || snapshot.hasError) {
-          return const Center(child: Text('Error loading translations'));
+          return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: SizedBox(
+              height: widgetHeight,
+              child: Center(child: Text('Error loading translations')),
+            ),
+          );
         }
 
         final translations = snapshot.data!;
@@ -53,55 +74,61 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> {
         final termsOfUseText = translations['termsOfUse'] ?? 'Terms of Use';
         final andText = translations['and'] ?? 'and';
 
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 40,
-                width: 40,
-                child: Checkbox(
-                  value: _isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      _isChecked = value ?? false;
-                    });
-                  },
-                  fillColor: WidgetStateProperty.all(Colors.white),
-                  checkColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-              ),
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    text: "$agreeToText ",
-                    style: baseStyle,
-                    children: [
-                      TextSpan(
-                        text: privacyPolicyText,
-                        style: linkStyle,
-                        recognizer: TapGestureRecognizer()..onTap = _onPrivacyPolicyTap,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SizedBox(
+            height: widgetHeight,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 3.0),
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: Checkbox(
+                      value: _isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked = value ?? false;
+                        });
+                      },
+                      fillColor: WidgetStateProperty.all(Colors.white),
+                      checkColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      TextSpan(
-                        text: " $andText ",
-                        style: baseStyle,
-                      ),
-                      TextSpan(
-                        text: termsOfUseText,
-                        style: linkStyle,
-                        recognizer: TapGestureRecognizer()..onTap = _onTermsOfUseTap,
-                      ),
-                    ],
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      text: "$agreeToText ",
+                      style: baseStyle,
+                      children: [
+                        TextSpan(
+                          text: privacyPolicyText,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()..onTap = _onPrivacyPolicyTap,
+                        ),
+                        TextSpan(
+                          text: " $andText ",
+                          style: baseStyle,
+                        ),
+                        TextSpan(
+                          text: termsOfUseText,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()..onTap = _onTermsOfUseTap,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
