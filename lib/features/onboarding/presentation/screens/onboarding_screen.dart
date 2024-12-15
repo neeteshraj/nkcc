@@ -10,7 +10,6 @@ import 'package:video_player/video_player.dart';
 import 'package:support/features/onboarding/data/datasources/onboarding_data_source.dart';
 import 'package:support/features/onboarding/data/models/onboarding_model.dart';
 
-
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -18,7 +17,7 @@ class OnboardingScreen extends StatefulWidget {
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBindingObserver {
   late VideoPlayerController _videoController;
 
   @override
@@ -30,12 +29,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         _videoController.setLooping(true);
         _videoController.play();
       });
+
+    // Add observer to handle app lifecycle changes
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     _videoController.dispose();
+    // Remove the observer when the screen is disposed
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Handle app lifecycle states to keep the video playing
+    if (state == AppLifecycleState.resumed) {
+      if (!_videoController.value.isPlaying) {
+        _videoController.play();
+      }
+    } else if (state == AppLifecycleState.paused) {
+      // You can handle the paused state if needed
+    }
   }
 
   Future<Map<String, String>> _loadTranslations(BuildContext context) async {
@@ -205,9 +221,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                                             ),
                                                             style: TextStyle(
                                                                 color: Colors.white,
-                                                              letterSpacing: 1.5,
-                                                              fontSize: 18,
-                                                              fontWeight: FontWeight.w600
+                                                                letterSpacing: 1.5,
+                                                                fontSize: 18,
+                                                                fontWeight: FontWeight.w600
                                                             ),
                                                             cursorColor: Colors.white,
                                                           ),

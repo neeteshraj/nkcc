@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:support/core/utils/size_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:support/core/utils/size_utils.dart';
 import 'package:support/features/qr_scan/presentation/widgets/camera_scanner.dart';
 import 'package:support/features/qr_scan/presentation/widgets/corner_images.dart';
 import 'package:support/features/qr_scan/presentation/widgets/permission_dialog.dart';
 import 'package:support/features/qr_scan/presentation/widgets/scan_indicator.dart';
 import 'package:support/features/qr_scan/presentation/widgets/scan_instructions.dart';
 import 'package:support/features/qr_scan/presentation/widgets/top_bar.dart';
-
+import 'package:support/features/qr_scan/presentation/widgets/scan_animation.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRCodeScreen extends StatefulWidget {
   const QRCodeScreen({Key? key}) : super(key: key);
@@ -17,10 +17,12 @@ class QRCodeScreen extends StatefulWidget {
   State<QRCodeScreen> createState() => _QRCodeScreenState();
 }
 
-class _QRCodeScreenState extends State<QRCodeScreen> {
+class _QRCodeScreenState extends State<QRCodeScreen> with SingleTickerProviderStateMixin {
   bool isFlashOn = false;
   bool hasPermission = false;
-  MobileScannerController cameraController = MobileScannerController();
+  MobileScannerController cameraController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates
+  );
 
   @override
   void initState() {
@@ -54,7 +56,6 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
     );
   }
 
-
   @override
   void dispose() {
     cameraController.dispose();
@@ -68,7 +69,9 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       body: hasPermission
           ? Stack(
         children: [
-          CameraScanner(controller: cameraController),
+          CameraScanner(
+            controller: cameraController, // Only pass the controller here
+          ),
           Positioned.fill(
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
@@ -106,6 +109,15 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
           const TopBar(),
           const ScanInstructions(),
           const ScanIndicator(),
+          Positioned(
+            bottom: SizeUtils.getHeight(context, 0.198),
+            left: 0,
+            right: 0,
+            child: ScanAnimation(
+              height: SizeUtils.getHeight(context, 0.6),
+              playbackSpeed: 1,
+            ),
+          ),
         ],
       )
           : const Center(child: CircularProgressIndicator()),
