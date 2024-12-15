@@ -205,9 +205,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                                             ),
                                                             style: TextStyle(
                                                                 color: Colors.white,
-                                                                letterSpacing: 1.5,
-                                                                fontSize: 18,
-                                                                fontWeight: FontWeight.w600
+                                                              letterSpacing: 1.5,
+                                                              fontSize: 18,
+                                                              fontWeight: FontWeight.w600
                                                             ),
                                                             cursorColor: Colors.white,
                                                           ),
