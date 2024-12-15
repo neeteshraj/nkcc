@@ -14,5 +14,8 @@
     "scan_to_add_product": "Scan to Add Product",
     "enter_code_to_add_product": "Enter code to Add product",
     "continue": "Continue",
-    "6DigitsOnBill": "6 digit code on bill"
+    "6DigitsOnBill": "6 digit code on bill",
+    "scanBarcode": "Scan Barcode",
+    "scanQRCode": "Scan QRCode",
+    "alignTheQR": "Align the QR code within the frame."
 }
