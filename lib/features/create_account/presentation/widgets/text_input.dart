@@ -1,58 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
-import 'package:support/core/utils/translation_utils.dart';
-import 'package:support/core/utils/validators.dart';
+import 'package:support/features/create_account/presentation/bloc/create_account_cubit.dart';
+import 'package:support/features/create_account/presentation/bloc/create_account_state.dart';
 
 class TextInputFieldsWidget extends StatefulWidget {
-  const TextInputFieldsWidget({super.key});
+  final Map<String, String> translations;
+
+  const TextInputFieldsWidget({super.key, required this.translations});
 
   @override
   _TextInputFieldsWidgetState createState() => _TextInputFieldsWidgetState();
 }
 
 class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
-  late Future<Map<String, String>> _translationsFuture;
-  bool _isPasswordVisible = false;
-
-  // Controllers for each text field
+  final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _translationsFuture = _loadTranslations(context);
-  }
-
-  Future<Map<String, String>> _loadTranslations(BuildContext context) async {
-    try {
-      final translations = await loadTranslations(context);
-      return translations;
-    } catch (error) {
-      return {};
-    }
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, String>>(
-      future: _translationsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    final translations = widget.translations;
 
-        if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Error loading translations'));
-        }
-
-        final translations = snapshot.data!;
+    return BlocBuilder<CreateAccountCubit, CreateAccountState>(
+      builder: (context,state){
         return SingleChildScrollView(
           child: Padding(
             padding: SizeUtils.getPadding(context, 0.01, 0),
@@ -62,6 +44,7 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                 Padding(
                   padding: SizeUtils.getPadding(context, 0, 0.05),
                   child: TextField(
+                    controller: _fullNameController,
                     cursorColor: Colors.white,
                     style: const TextStyle(
                       color: Colors.white,
@@ -91,6 +74,9 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                     key: _formKey,
                     child: TextFormField(
                       controller: _emailController,
+                      onChanged: (value) {
+                        context.read<CreateAccountCubit>().updateEmail(value);
+                      },
                       cursorColor: Colors.white,
                       style: const TextStyle(
                         color: Colors.white,
@@ -112,7 +98,6 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                         ),
                       ),
                       textInputAction: TextInputAction.next,
-                      validator: validateEmail,
                     ),
                   ),
                 ),
@@ -121,6 +106,7 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                   child: TextField(
                     cursorColor: Colors.white,
                     obscureText: !_isPasswordVisible,
+                    controller: _passwordController,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -160,7 +146,7 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
             ),
           ),
         );
-      },
+      }
     );
   }
 }
