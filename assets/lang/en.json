@@ -1,6 +1,6 @@
 {
-    "onboarding_title_1":"Welcome to NKCC Customer Supoort",
-    "onboarding_description_1":"Discover products and services tailored to your needs.",
+    "onboarding_title_1":"Easily manage your products",
+    "onboarding_description_1":"Register your products and access maintenance and repair services in just a few taps.",
     "onboarding_title_2":"Real-Time Support",
     "onboarding_description_2":"Get 24/7 support and resolve your issues quickly.",
     "onboarding_title_3":"Track Your Purchases",
@@ -10,5 +10,22 @@
     "get_started":"Get Started",
     "pageMissing":"Boo! Page missing!",
     "pageMissingDescription":"Whoops! This page must be a ghost - it's not here!",
-    "findShelter":"Find Shelter"
+    "findShelter":"Find Shelter",
+    "scan_to_add_product": "Scan to Add Product",
+    "enter_code_to_add_product": "Enter code to Add product",
+    "continue": "Continue",
+    "6DigitsOnBill": "6 digit code on bill",
+    "scanBarcode": "Scan Barcode",
+    "scanQRCode": "Scan QRCode",
+    "alignTheQR": "Align the QR code within the frame.",
+    "letsCreateAccount": "Let's create your account",
+    "createAccountDescription": "Create an account to manage your products and services",
+    "enterFullName": "Enter your full name",
+    "enterEmailAddress": "Enter your email address",
+    "password": "Create a strong password",
+    "agreeTo": "I agree to NKCC's",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and",
+    "termsOfUse": "Terms of Use",
+    "complete": "Complete"
 }
