@@ -1,6 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nkcc.singlecustomerapp.activity.support">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
-        android:label="NKCC Support"
+        android:label="NKCC Connect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

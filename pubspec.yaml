@@ -43,6 +43,12 @@ dependencies:
     sdk: flutter
   intl: ^0.19.0
   flutter_native_splash: ^2.4.3
+  video_player: ^2.9.2
+  qr_flutter: ^4.1.0
+  permission_handler: ^11.3.1
+  mobile_scanner: ^6.0.2
+  lottie: ^3.3.0
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +76,8 @@ flutter:
   assets:
      - assets/images/
      - assets/lang/
-
+     - assets/videos/
+     - assets/lottie/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -83,42 +90,49 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Poppins
+    - family: BebasNeue
       fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Thin.ttf
+        - asset: assets/fonts/BebasNeue-Thin.otf
           weight: 100
-        - asset: assets/fonts/Poppins-Light.ttf
+        - asset: assets/fonts/BebasNeue-Light.otf
           weight: 300
-        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/BebasNeue-Regular.otf
+          weight: 400
+        - asset: assets/fonts/BebasNeue-Book.otf
           weight: 500
-        - asset: assets/fonts/Poppins-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/BebasNeue-Bold.otf
           weight: 700
-        - asset: assets/fonts/Poppins-ExtraBold.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
           weight: 800
-        - asset: assets/fonts/Poppins-Italic.ttf
+        - asset: assets/fonts/Inter-Italic.ttf
           style: italic
-        - asset: assets/fonts/Poppins-LightItalic.ttf
+        - asset: assets/fonts/Inter-LightItalic.ttf
           weight: 300
           style: italic
-        - asset: assets/fonts/Poppins-MediumItalic.ttf
+        - asset: assets/fonts/Inter-MediumItalic.ttf
           weight: 500
           style: italic
-        - asset: assets/fonts/Poppins-SemiBoldItalic.ttf
+        - asset: assets/fonts/Inter-SemiBoldItalic.ttf
           weight: 600
           style: italic
-        - asset: assets/fonts/Poppins-BoldItalic.ttf
+        - asset: assets/fonts/Inter-BoldItalic.ttf
           weight: 700
           style: italic
-        - asset: assets/fonts/Poppins-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Inter-ExtraBoldItalic.ttf
           weight: 800
-          style: italic
-        - asset: assets/fonts/Poppins-Black.ttf
-          weight: 900
-        - asset: assets/fonts/Poppins-BlackItalic.ttf
-          weight: 900
           style: italic
   #
   # For details regarding fonts from package dependencies,
