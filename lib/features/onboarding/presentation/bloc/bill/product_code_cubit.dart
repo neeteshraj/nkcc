@@ -2,7 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/config/endpoints/endpoints.dart';
 import 'package:support/core/network/api_service.dart';
 import 'package:support/core/utils/request_header_generator.dart';
-import 'package:support/features/onboarding/data/models/login_model.dart';
+import 'package:support/features/onboarding/data/models/token_info.dart';
+import 'package:support/features/onboarding/data/models/user_model.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_state.dart';
 
 class ProductCodeCubit extends Cubit<ProductCodeState> {
@@ -24,24 +25,42 @@ class ProductCodeCubit extends Cubit<ProductCodeState> {
 
       final response = await _apiService.post(Endpoints.login, data: payload);
 
-      final userResponse = LoginResponse.fromJson(response);
+      print("Response: $response");
 
-      if (userResponse.responseHeader.status == 200) {
-        final userData = userResponse.userData;
-        final tokenInfo = userResponse.tokenInfo;
-
-        emit(ProductCodeSuccess(userData: userData, tokenInfo: tokenInfo));
-      } else if (userResponse.responseHeader.status == 404 &&
-          userResponse.responseHeader.responseTitle == "User Not Found") {
-        emit(ProductCodeError("No user found associated with the provided bill number."));
-      } else if (userResponse.responseHeader.status == 404 &&
-          userResponse.responseHeader.responseTitle == "Bill Number Not Found") {
-        emit(ProductCodeError("The provided bill number does not exist or is incorrect."));
-      } else {
-        emit(ProductCodeError(userResponse.responseHeader.responseDescription));
+      if (response == null || response.isEmpty) {
+        emit(ProductCodeError("Received empty or null response from the server."));
+        return;
       }
+
+      if (response['responseHeader'] != null && response['responseHeader']['status'] == 404) {
+        final errorDescription = response['responseHeader']['responseDescription'];
+        emit(ProductCodeError("$errorDescription"));
+        return;
+      }
+
+      if (response['responseHeader'] != null && response['responseHeader']['status'] == 200) {
+        final user = response['response']?['user'];
+        final tokenInfo = response['response']?['tokenInfo'];
+
+        if (user == null || tokenInfo == null) {
+          emit(ProductCodeError("User data or token information is missing in the response."));
+          return;
+        }
+
+        try {
+          final userData = UserData.fromJson(user); 
+          final tokenData = TokenInfo.fromJson(tokenInfo);
+
+          emit(ProductCodeSuccess(userData: userData, tokenInfo: tokenData));
+        } catch (e) {
+          emit(ProductCodeError("Error while parsing response: ${e.toString()}"));
+        }
+      } else {
+        emit(ProductCodeError("Unexpected response status: ${response['responseHeader']['statusCode']}"));
+      }
+
     } catch (e) {
-      emit(ProductCodeError(e.toString()));
+      emit(ProductCodeError("An error occurred: ${e.toString()}"));
     }
   }
 }
