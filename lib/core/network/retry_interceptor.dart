@@ -14,33 +14,47 @@ class RetryInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (_shouldRetry(err)) {
-      var retries = err.requestOptions.extra["retries"] ?? 0;
-      if (retries < maxRetries) {
-        err.requestOptions.extra["retries"] = retries + 1;
-        LoggerUtils.logError('Error occurred: ${err.message}');
-        LoggerUtils.logInfo('Retrying request... Attempt: ${retries + 1}');
-        await Future.delayed(retryInterval);
+    final shouldRetry = _shouldRetry(err);
+    final retries = (err.requestOptions.extra["retries"] as int?) ?? 0;
 
-        try {
-          final response = await dio.request(
-            err.requestOptions.path,
-            options: Options(
-              method: err.requestOptions.method,
-              headers: err.requestOptions.headers,
-            ),
-            data: err.requestOptions.data,
-            queryParameters: err.requestOptions.queryParameters,
-          );
-          return handler.resolve(response);
-        } catch (e) {
-          LoggerUtils.logError('Retry failed: $e');
-          return super.onError(err, handler);
-        }
+    if (shouldRetry && retries < maxRetries) {
+      err.requestOptions.extra["retries"] = retries + 1;
+
+      LoggerUtils.logError('Error occurred: ${err.message}');
+      LoggerUtils.logInfo('Retrying request... Attempt: ${retries + 1}');
+
+      await Future.delayed(retryInterval);
+
+      try {
+        final response = await dio.request(
+          err.requestOptions.path,
+          options: Options(
+            method: err.requestOptions.method,
+            headers: err.requestOptions.headers,
+          ),
+          data: err.requestOptions.data,
+          queryParameters: err.requestOptions.queryParameters,
+        );
+
+        err.requestOptions.extra["retries"] = 0;
+        return handler.resolve(response);
+      } catch (retryError) {
+        LoggerUtils.logError('Retry failed: $retryError');
+        return handler.next(err);
       }
     }
 
-    super.onError(err, handler);
+    if (!shouldRetry) {
+      LoggerUtils.logError('Retry not allowed for error: ${err.message}');
+    } else {
+      LoggerUtils.logError('Max retries exceeded for ${err.requestOptions.path}');
+    }
+
+    if (err.response != null) {
+      handler.resolve(err.response!);
+    } else {
+      handler.next(err);
+    }
   }
 
   bool _shouldRetry(DioException err) {
@@ -48,9 +62,6 @@ class RetryInterceptor extends Interceptor {
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
         err.type == DioExceptionType.unknown ||
-        err.type == DioExceptionType.badCertificate ||
-        err.type == DioExceptionType.cancel ||
-        err.type == DioExceptionType.badResponse ||
-        (err.response?.statusCode == 500 || err.response?.statusCode == 502);
+        (err.response?.statusCode == 500 || err.response?.statusCode == 502 || err.response?.statusCode == 503);
   }
 }

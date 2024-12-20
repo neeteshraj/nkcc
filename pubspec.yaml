@@ -50,6 +50,9 @@ dependencies:
   lottie: ^3.3.0
   logger: ^2.5.0
   dio: ^5.7.0
+  device_info_plus: ^11.2.0
+  package_info_plus: ^8.1.2
+  dio_smart_retry: ^7.0.1
 
 dev_dependencies:
   flutter_test:

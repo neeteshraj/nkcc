@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/core/constants/videos_path.dart';
+import 'package:support/core/network/api_service.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/core/utils/translation_utils.dart';
+import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
+import 'package:support/features/onboarding/presentation/bloc/bill/product_code_state.dart';
 import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:support/features/onboarding/presentation/widgets/onboarding_card.dart';
 import 'package:video_player/video_player.dart';
@@ -61,8 +64,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
 
-    return BlocProvider(
-      create: (_) => OnboardingCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => OnboardingCubit()),
+        BlocProvider(create: (_) => ProductCodeCubit(ApiService())),
+      ],
+
       child: FutureBuilder<Map<String, String>>(
         future: _loadTranslations(context),
         builder: (context, snapshot) {
@@ -121,7 +128,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                 ),
                               ),
                             Container(
-                              color: Colors.black.withOpacity(0.6),
+                              color: Colors.black.withValues(alpha: 0.7),
                             ),
                             Positioned(
                               bottom: 0,
@@ -155,14 +162,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                           width: double.infinity,
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              if (_controller.text.length < 8) {
-                                                _errorTextNotifier.value = "Code must be at least 8 digits";
-                                              } else {
-                                                _errorTextNotifier.value = null;
-                                                Navigator.pop(context);
-                                                _controller.clear();
-                                                Navigator.pushNamed(context, "/createaccount");
-                                              }
+                                              cubit.nextPage(state.index, onboardingData.length);
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: AppColors.buttonBackground,
@@ -188,92 +188,115 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                                 borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
                                               ),
                                               builder: (context) {
-                                                return Padding(
-                                                  padding: MediaQuery.of(context).viewInsets,
-                                                  child: Container(
-                                                    width: MediaQuery.of(context).size.width,
-                                                    padding: const EdgeInsets.all(30.0),
-                                                    child: SingleChildScrollView(
-                                                      child: Column(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text(
-                                                              translations['enter_product_code'] ?? "Enter Product Code",
-                                                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                                                color: Colors.white,
-                                                                fontWeight: FontWeight.bold,
+                                                return BlocConsumer<ProductCodeCubit, ProductCodeState>(
+                                                  listener: (context, state) {
+                                                    if (state is ProductCodeSuccess) {
+                                                      _controller.clear();
+                                                      Navigator.of(context, rootNavigator: true).pop();
+                                                      print("Success code => $state");
+                                                      // Navigator.pushNamed(context, "/createaccount");
+                                                    } else if (state is ProductCodeError) {
+                                                      print("Error while checking bill ${state.errorMessage}");
+                                                      _errorTextNotifier.value = state.errorMessage;
+                                                    }
+                                                  },
+                                                  builder: (context, state) {
+                                                    return Padding(
+                                                      padding: MediaQuery.of(context).viewInsets,
+                                                      child: Container(
+                                                        width: MediaQuery.of(context).size.width,
+                                                        padding: const EdgeInsets.all(30.0),
+                                                        child: SingleChildScrollView(
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Text(
+                                                                  translations['enter_product_code'] ?? "Enter Product Code",
+                                                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                                                    color: Colors.white,
+                                                                    fontWeight: FontWeight.bold,
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: SizeUtils.getHeight(context, 0.02)),
-                                                          ValueListenableBuilder<String?>(
-                                                            valueListenable: _errorTextNotifier,
-                                                            builder: (context, errorText, child) {
-                                                              return TextField(
-                                                                controller: _controller,
-                                                                onChanged: (value) {
-                                                                  _errorTextNotifier.value = value.length < 8 ? "Code must be at least 8 digits" : null;
+                                                              SizedBox(height: SizeUtils.getHeight(context, 0.02)),
+                                                              ValueListenableBuilder<String?>(
+                                                                valueListenable: _errorTextNotifier,
+                                                                builder: (context, errorText, child) {
+                                                                  return TextField(
+                                                                    controller: _controller,
+                                                                    onChanged: (value) {
+                                                                      _errorTextNotifier.value =
+                                                                      value.length < 8 ? "Code must be at least 8 digits" : null;
+                                                                    },
+                                                                    decoration: InputDecoration(
+                                                                      hintText: "8 digit code on bill",
+                                                                      hintStyle: const TextStyle(
+                                                                          color: Colors.white54,
+                                                                          fontSize: 16,
+                                                                          fontWeight: FontWeight.normal,
+                                                                          letterSpacing: 1),
+                                                                      filled: true,
+                                                                      fillColor: AppColors.backgroundColor,
+                                                                      errorText: errorText,
+                                                                      errorStyle: const TextStyle(
+                                                                        fontSize: 12
+                                                                      ),
+                                                                      border: InputBorder.none,
+                                                                      focusedBorder: const UnderlineInputBorder(
+                                                                        borderSide: BorderSide(color: Colors.white),
+                                                                      ),
+                                                                      enabledBorder: const UnderlineInputBorder(
+                                                                        borderSide: BorderSide(color: Colors.white54),
+                                                                      ),
+                                                                      contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
+                                                                      counterText: "",
+                                                                    ),
+                                                                    style: const TextStyle(
+                                                                      color: Colors.white,
+                                                                      letterSpacing: 1.5,
+                                                                      fontSize: 18,
+                                                                      fontWeight: FontWeight.w600,
+                                                                    ),
+                                                                    cursorColor: Colors.white,
+                                                                    keyboardType: TextInputType.number,
+                                                                    maxLength: 8,
+                                                                  );
                                                                 },
-                                                                decoration: InputDecoration(
-                                                                  hintText: "8 digit code on bill",
-                                                                  hintStyle: const TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
-                                                                  filled: true,
-                                                                  fillColor: AppColors.backgroundColor,
-                                                                  errorText: errorText,
-                                                                  border: InputBorder.none,
-                                                                  focusedBorder: const UnderlineInputBorder(
-                                                                    borderSide: BorderSide(color: Colors.white),
-                                                                  ),
-                                                                  enabledBorder: const UnderlineInputBorder(
-                                                                    borderSide: BorderSide(color: Colors.white54),
-                                                                  ),
-                                                                  contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
-                                                                  counterText: "",
-                                                                ),
-                                                                style: const TextStyle(
-                                                                  color: Colors.white,
-                                                                  letterSpacing: 1.5,
-                                                                  fontSize: 18,
-                                                                  fontWeight: FontWeight.w600,
-                                                                ),
-                                                                cursorColor: Colors.white,
-                                                                keyboardType: TextInputType.number,
-                                                                maxLength: 8,
-                                                              );
-                                                            },
-                                                          ),
-                                                          SizedBox(height: SizeUtils.getHeight(context, 0.02)),
-                                                          SizedBox(
-                                                            width: double.infinity,
-                                                            child: ElevatedButton(
-                                                              onPressed: () {
-                                                                if (_controller.text.length < 8) {
-                                                                  _errorTextNotifier.value = "Code must be at least 8 digits";
-                                                                } else {
-                                                                  _errorTextNotifier.value = null;
-                                                                  Navigator.pushNamed(context, "/createaccount");
-                                                                }
-                                                              },
-                                                              style: ElevatedButton.styleFrom(
-                                                                backgroundColor: AppColors.buttonBackground,
-                                                                padding: const EdgeInsets.symmetric(vertical: 15.0),
                                                               ),
-                                                              child: Text(
-                                                                translations["continue"] ?? "Continue",
-                                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                                  color: Colors.black,
-                                                                  fontWeight: FontWeight.w600,
+                                                              SizedBox(height: SizeUtils.getHeight(context, 0.02)),
+                                                              SizedBox(
+                                                                width: double.infinity,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    if (_controller.text.length < 8) {
+                                                                      _errorTextNotifier.value = "Code must be at least 8 digits";
+                                                                    } else {
+                                                                      _errorTextNotifier.value = null;
+                                                                      context.read<ProductCodeCubit>().submitCode(_controller.text);
+                                                                    }
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: AppColors.buttonBackground,
+                                                                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                                                  ),
+                                                                  child: Text(
+                                                                    translations["continue"] ?? "Continue",
+                                                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                                      color: Colors.black,
+                                                                      fontWeight: FontWeight.w600,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
+                                                              SizedBox(height: SizeUtils.getHeight(context, 0.01)),
+                                                            ],
                                                           ),
-                                                          SizedBox(height: SizeUtils.getHeight(context, 0.01)),
-                                                        ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
+                                                    );
+                                                  },
                                                 );
                                               },
                                             );
@@ -304,6 +327,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
           }
         },
       ),
+
     );
   }
 }
