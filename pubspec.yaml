@@ -53,6 +53,7 @@ dependencies:
   device_info_plus: ^11.2.0
   package_info_plus: ^8.1.2
   dio_smart_retry: ^7.0.1
+  shared_preferences: ^2.3.4
 
 dev_dependencies:
   flutter_test:

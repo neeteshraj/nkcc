@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/config/endpoints/endpoints.dart';
 import 'package:support/core/network/api_service.dart';
 import 'package:support/core/utils/request_header_generator.dart';
+import 'package:support/core/utils/shared_preferences_helper.dart';
 import 'package:support/features/onboarding/data/models/token_info.dart';
 import 'package:support/features/onboarding/data/models/user_model.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_state.dart';
@@ -25,8 +26,6 @@ class ProductCodeCubit extends Cubit<ProductCodeState> {
 
       final response = await _apiService.post(Endpoints.login, data: payload);
 
-      print("Response: $response");
-
       if (response == null || response.isEmpty) {
         emit(ProductCodeError("Received empty or null response from the server."));
         return;
@@ -48,8 +47,10 @@ class ProductCodeCubit extends Cubit<ProductCodeState> {
         }
 
         try {
-          final userData = UserData.fromJson(user); 
+          final userData = UserData.fromJson(user);
           final tokenData = TokenInfo.fromJson(tokenInfo);
+
+          await SharedPreferencesHelper.saveTokenData(tokenData);
 
           emit(ProductCodeSuccess(userData: userData, tokenInfo: tokenData));
         } catch (e) {

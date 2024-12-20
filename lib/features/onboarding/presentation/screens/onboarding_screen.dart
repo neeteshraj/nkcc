@@ -193,14 +193,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                                     if (state is ProductCodeSuccess) {
                                                       _controller.clear();
                                                       Navigator.of(context, rootNavigator: true).pop();
-                                                      print("Success code => $state");
-                                                      // Navigator.pushNamed(context, "/createaccount");
+                                                      Navigator.pushReplacementNamed(context, "/home");
                                                     } else if (state is ProductCodeError) {
-                                                      print("Error while checking bill ${state.errorMessage}");
-                                                      _errorTextNotifier.value = state.errorMessage;
+                                                      if (state.errorMessage.contains("does not exist in the system")) {
+                                                        _errorTextNotifier.value = state.errorMessage;
+                                                      } else if (state.errorMessage.contains("No user is associated with the bill number")) {
+                                                        _controller.clear();
+                                                        Navigator.of(context, rootNavigator: true).pop();
+                                                        Navigator.pushNamed(context, "/createaccount");
+                                                      } else {
+                                                        _errorTextNotifier.value = "An unexpected error occurred.";
+                                                      }
                                                     }
                                                   },
                                                   builder: (context, state) {
+                                                    final isLoading = state is ProductCodeLoading;
+
                                                     return Padding(
                                                       padding: MediaQuery.of(context).viewInsets,
                                                       child: Container(
@@ -281,7 +289,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                                                     backgroundColor: AppColors.buttonBackground,
                                                                     padding: const EdgeInsets.symmetric(vertical: 15.0),
                                                                   ),
-                                                                  child: Text(
+                                                                  child: isLoading
+                                                                      ? const SizedBox(
+                                                                    height: 24,
+                                                                    width: 24,
+                                                                    child: CircularProgressIndicator(
+                                                                      color: Colors.black,
+                                                                      strokeWidth: 2,
+                                                                    ),
+                                                                  )
+                                                                      : Text(
                                                                     translations["continue"] ?? "Continue",
                                                                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                                                       color: Colors.black,
