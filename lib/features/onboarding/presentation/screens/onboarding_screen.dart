@@ -19,6 +19,8 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBindingObserver {
   late VideoPlayerController _videoController;
+  final TextEditingController _controller = TextEditingController();
+  final ValueNotifier<String?> _errorTextNotifier = ValueNotifier<String?>(null);
 
   @override
   void initState() {
@@ -30,27 +32,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
         _videoController.play();
       });
 
-    // Add observer to handle app lifecycle changes
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     _videoController.dispose();
-    // Remove the observer when the screen is disposed
+    _errorTextNotifier.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Handle app lifecycle states to keep the video playing
     if (state == AppLifecycleState.resumed) {
       if (!_videoController.value.isPlaying) {
         _videoController.play();
       }
-    } else if (state == AppLifecycleState.paused) {
-      // You can handle the paused state if needed
     }
   }
 
@@ -124,7 +123,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                             Container(
                               color: Colors.black.withOpacity(0.6),
                             ),
-                            // Bottom sheet and other content
                             Positioned(
                               bottom: 0,
                               left: 0,
@@ -157,7 +155,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                           width: double.infinity,
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              cubit.nextPage(state.index, onboardingData.length);
+                                              if (_controller.text.length < 8) {
+                                                _errorTextNotifier.value = "Code must be at least 8 digits";
+                                              } else {
+                                                _errorTextNotifier.value = null;
+                                                Navigator.pop(context);
+                                                _controller.clear();
+                                                Navigator.pushNamed(context, "/createaccount");
+                                              }
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: AppColors.buttonBackground,
@@ -203,35 +208,53 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                                             ),
                                                           ),
                                                           SizedBox(height: SizeUtils.getHeight(context, 0.02)),
-                                                          const TextField(
-                                                            decoration: InputDecoration(
-                                                              hintText: "6 digit code on bill",
-                                                              hintStyle: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
-                                                              filled: true,
-                                                              fillColor: AppColors.backgroundColor,
-                                                              border: InputBorder.none,
-                                                              focusedBorder: UnderlineInputBorder(
-                                                                borderSide: BorderSide(color: Colors.white),
-                                                              ),
-                                                              enabledBorder: UnderlineInputBorder(
-                                                                borderSide: BorderSide(color: Colors.white54),
-                                                              ),
-                                                              contentPadding: EdgeInsets.symmetric(vertical: 18.0),
-                                                            ),
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                letterSpacing: 1.5,
-                                                                fontSize: 18,
-                                                                fontWeight: FontWeight.w600
-                                                            ),
-                                                            cursorColor: Colors.white,
+                                                          ValueListenableBuilder<String?>(
+                                                            valueListenable: _errorTextNotifier,
+                                                            builder: (context, errorText, child) {
+                                                              return TextField(
+                                                                controller: _controller,
+                                                                onChanged: (value) {
+                                                                  _errorTextNotifier.value = value.length < 8 ? "Code must be at least 8 digits" : null;
+                                                                },
+                                                                decoration: InputDecoration(
+                                                                  hintText: "8 digit code on bill",
+                                                                  hintStyle: const TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 1),
+                                                                  filled: true,
+                                                                  fillColor: AppColors.backgroundColor,
+                                                                  errorText: errorText,
+                                                                  border: InputBorder.none,
+                                                                  focusedBorder: const UnderlineInputBorder(
+                                                                    borderSide: BorderSide(color: Colors.white),
+                                                                  ),
+                                                                  enabledBorder: const UnderlineInputBorder(
+                                                                    borderSide: BorderSide(color: Colors.white54),
+                                                                  ),
+                                                                  contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
+                                                                  counterText: "",
+                                                                ),
+                                                                style: const TextStyle(
+                                                                  color: Colors.white,
+                                                                  letterSpacing: 1.5,
+                                                                  fontSize: 18,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                                cursorColor: Colors.white,
+                                                                keyboardType: TextInputType.number,
+                                                                maxLength: 8,
+                                                              );
+                                                            },
                                                           ),
                                                           SizedBox(height: SizeUtils.getHeight(context, 0.02)),
                                                           SizedBox(
                                                             width: double.infinity,
                                                             child: ElevatedButton(
                                                               onPressed: () {
-                                                                // Action when button is pressed
+                                                                if (_controller.text.length < 8) {
+                                                                  _errorTextNotifier.value = "Code must be at least 8 digits";
+                                                                } else {
+                                                                  _errorTextNotifier.value = null;
+                                                                  Navigator.pushNamed(context, "/createaccount");
+                                                                }
                                                               },
                                                               style: ElevatedButton.styleFrom(
                                                                 backgroundColor: AppColors.buttonBackground,
@@ -263,7 +286,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                             ),
                                           ),
                                         ),
-                                        SizedBox(height: SizeUtils.getHeight(context, 0.015))
+                                        SizedBox(height: SizeUtils.getHeight(context, 0.015)),
                                       ],
                                     ),
                                   ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:support/core/utils/translation_utils.dart';
 
 class PrivacyPolicyCheckbox extends StatefulWidget {
-  const PrivacyPolicyCheckbox({Key? key}) : super(key: key);
+  const PrivacyPolicyCheckbox({super.key});
 
   @override
   _PrivacyPolicyCheckboxState createState() => _PrivacyPolicyCheckboxState();
@@ -83,23 +83,27 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 3.0),
-                  child: SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: Checkbox(
-                      value: _isChecked,
-                      onChanged: (value) {
-                        setState(() {
-                          _isChecked = value ?? false;
-                        });
-                      },
-                      fillColor: WidgetStateProperty.all(Colors.white),
-                      checkColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: Checkbox(
+                          value: _isChecked,
+                          onChanged: (value) {
+                            setState(() {
+                              _isChecked = value ?? false;
+                            });
+                          },
+                          fillColor: WidgetStateProperty.all(Colors.white),
+                          checkColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
