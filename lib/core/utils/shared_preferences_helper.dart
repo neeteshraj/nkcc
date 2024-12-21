@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:support/config/logger/logger.dart';
+import 'package:support/core/constants/app_secrets.dart';
 import 'package:support/features/onboarding/data/models/token_info.dart';
 
 class SharedPreferencesHelper {
@@ -7,11 +8,11 @@ class SharedPreferencesHelper {
     try {
       final preferences = await SharedPreferences.getInstance();
 
-      await preferences.setString('authToken', tokenData.authToken);
-      await preferences.setString('refreshToken', tokenData.refreshToken);
-      await preferences.setInt('expiresIn', tokenData.expiresIn);
-      await preferences.setInt('generatedAt', tokenData.generatedAt);
-      await preferences.setInt('refreshExpiresIn', tokenData.refreshExpiresIn);
+      await preferences.setString(AppSecrets.authToken, tokenData.authToken);
+      await preferences.setString(AppSecrets.refreshToken, tokenData.refreshToken);
+      await preferences.setInt(AppSecrets.expiresIn, tokenData.expiresIn);
+      await preferences.setInt(AppSecrets.generatedAt, tokenData.generatedAt);
+      await preferences.setInt(AppSecrets.refreshExpiresIn, tokenData.refreshExpiresIn);
 
       LoggerUtils.logInfo("Saved token information to shared preferences");
     } catch (e) {
@@ -23,11 +24,11 @@ class SharedPreferencesHelper {
     try {
       final preferences = await SharedPreferences.getInstance();
 
-      final authToken = preferences.getString('authToken');
-      final refreshToken = preferences.getString('refreshToken');
-      final expiresIn = preferences.getInt('expiresIn');
-      final generatedAt = preferences.getInt('generatedAt');
-      final refreshExpiresIn = preferences.getInt('refreshExpiresIn');
+      final authToken = preferences.getString(AppSecrets.authToken);
+      final refreshToken = preferences.getString(AppSecrets.refreshToken);
+      final expiresIn = preferences.getInt(AppSecrets.expiresIn);
+      final generatedAt = preferences.getInt(AppSecrets.generatedAt);
+      final refreshExpiresIn = preferences.getInt(AppSecrets.refreshExpiresIn);
 
       if (authToken != null &&
           refreshToken != null &&
@@ -53,11 +54,11 @@ class SharedPreferencesHelper {
     try {
       final preferences = await SharedPreferences.getInstance();
 
-      await preferences.remove('authToken');
-      await preferences.remove('refreshToken');
-      await preferences.remove('expiresIn');
-      await preferences.remove('generatedAt');
-      await preferences.remove('refreshExpiresIn');
+      await preferences.remove(AppSecrets.authToken);
+      await preferences.remove(AppSecrets.refreshToken);
+      await preferences.remove(AppSecrets.expiresIn);
+      await preferences.remove(AppSecrets.generatedAt);
+      await preferences.remove(AppSecrets.refreshExpiresIn);
 
       LoggerUtils.logInfo("Token information cleared from local storage.");
     } catch (e) {
