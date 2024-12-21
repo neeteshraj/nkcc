@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:support/core/network/api_service.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/translation_utils.dart';
 import 'package:support/features/create_account/presentation/bloc/create_account_cubit.dart';
@@ -23,8 +24,9 @@ class CreateAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiService = ApiService();
     return BlocProvider(
-        create: (_) => CreateAccountCubit(),
+        create: (_) => CreateAccountCubit(apiService: apiService),
         child: Scaffold(
           backgroundColor: AppColors.backgroundColor,
           body: FutureBuilder<Map<String, String>>(

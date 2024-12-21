@@ -17,6 +17,7 @@ class ContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buttonText = translations[translationKey] ?? 'Complete';
+    final isPrivacyPolicyChecked = context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked;
 
     return Padding(
       padding: SizeUtils.getPadding(context, 0, 0.05),
@@ -27,10 +28,13 @@ class ContinueButton extends StatelessWidget {
             FocusScope.of(context).unfocus();
             final state = context.read<CreateAccountCubit>().state;
             print('Current email: ${state.email}, isValid: ${state.isEmailValid}');
+            print(isPrivacyPolicyChecked);
+
             if (state.isEmailValid) {
               print("Form submitted successfully!");
+              context.read<CreateAccountCubit>().submitForm();
             } else {
-              print("Invalid email address!");
+              print("Invalid email address or privacy policy not accepted!");
             }
           },
           style: ElevatedButton.styleFrom(

@@ -58,6 +58,15 @@ class RetryInterceptor extends Interceptor {
   }
 
   bool _shouldRetry(DioException err) {
+    if (err.response != null) {
+      final responseBody = err.response?.data;
+      final statusCode = err.response?.statusCode;
+
+      if (statusCode == 500 && responseBody != null) {
+        return false;
+      }
+    }
+
     return err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
