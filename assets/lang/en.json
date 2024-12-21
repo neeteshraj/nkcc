@@ -33,5 +33,6 @@
     "phoneRequired": "Phone number is required",
     "invalidPhone": "Invalid phone number",
     "emailRequired": "Email is required",
-    "invalidEmail": "Invalid email address"
+    "invalidEmail": "Invalid email address",
+    "welcomeBack": "Welcome Back"
 }

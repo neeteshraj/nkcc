@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:support/core/widgets/global/custom_bottom_tab.dart';
 import 'package:support/features/create_account/presentation/screen/create_account.dart';
-import 'package:support/features/home/presentation/home_screen.dart';
+import 'package:support/features/home/presentation/screen/home_screen.dart';
 import 'package:support/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:support/features/not_found_screen/presentation/not_found_screen.dart';
 import 'package:support/features/privacy_policy/presentation/screen/privacy_policy.dart';
