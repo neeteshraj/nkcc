@@ -57,6 +57,11 @@ dependencies:
   keyboard_actions: ^4.2.0
   mockito: ^5.4.5
   test: ^1.25.8
+  firebase_core: ^3.9.0
+  firebase_analytics: ^11.3.6
+  firebase_crashlytics: ^4.2.0
+  firebase_messaging: ^15.1.6
+  flutter_local_notifications: ^18.0.1
 
 dev_dependencies:
   flutter_test:

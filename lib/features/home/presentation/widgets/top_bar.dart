@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:support/config/routes/routes.dart';
 import 'package:support/core/theme/app_colors.dart';
 
 class TopBar extends StatelessWidget {
@@ -8,7 +9,8 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const imageUrl = 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+    const imageUrl =
+        'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,12 +38,21 @@ class TopBar extends StatelessWidget {
             ),
           ],
         ),
-        ClipOval(
-          child: Image.network(
-            imageUrl,
-            width: 45,
-            height: 45,
-            fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.home,
+              arguments: 3,
+            );
+          },
+          child: ClipOval(
+            child: Image.network(
+              imageUrl,
+              width: 45,
+              height: 45,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ],

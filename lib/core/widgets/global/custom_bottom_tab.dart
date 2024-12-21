@@ -25,10 +25,27 @@ class _CustomBottomTabState extends State<CustomBottomTab> {
     const ProfileScreen(),
   ];
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is int) {
+      setState(() {
+        _selectedIndex = args;
+      });
+    }
+  }
+
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void navigateToTab(int index) {
+    _onItemTapped(index);
   }
 
   @override
@@ -131,7 +148,7 @@ class _CustomBottomTabState extends State<CustomBottomTab> {
                         width: imageSize,
                         height: imageSize,
                       ),
-                      const SizedBox(height: 4), 
+                      const SizedBox(height: 4),
                     ],
                   ),
                   label: 'Profile',
