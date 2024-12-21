@@ -24,6 +24,7 @@ class ContinueButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
+            FocusScope.of(context).unfocus();
             final state = context.read<CreateAccountCubit>().state;
             print('Current email: ${state.email}, isValid: ${state.isEmailValid}');
             if (state.isEmailValid) {

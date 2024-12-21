@@ -28,5 +28,10 @@
     "privacyPolicy": "Privacy Policy",
     "and": "and",
     "termsOfUse": "Terms of Use",
-    "complete": "Complete"
+    "complete": "Complete",
+    "enterPhoneNumber": "Enter phone number",
+    "phoneRequired": "Phone number is required",
+    "invalidPhone": "Invalid phone number",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Invalid email address"
 }

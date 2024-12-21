@@ -8,7 +8,7 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
 
   void updateEmail(String email) {
     final isValid = validateEmail(email);
-    print('Updating email: $email -> isValid: $isValid');
     emit(state.copyWith(email: email, isEmailValid: isValid));
   }
+
 }

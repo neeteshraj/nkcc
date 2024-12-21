@@ -73,7 +73,7 @@ class CreateAccountScreen extends StatelessWidget {
                                 height: SizeUtils.getHeight(context, 0.03)),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: SizeUtils.getHeight(context, 0.1)),
+                                  top: SizeUtils.getHeight(context, 0.05)),
                               child: ContinueButton(
                                 translations: translations,
                               ),

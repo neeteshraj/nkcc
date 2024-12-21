@@ -54,6 +54,7 @@ dependencies:
   package_info_plus: ^8.1.2
   dio_smart_retry: ^7.0.1
   shared_preferences: ^2.3.4
+  keyboard_actions: ^4.2.0
 
 dev_dependencies:
   flutter_test:
