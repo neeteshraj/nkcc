@@ -52,7 +52,6 @@ class FirebaseMessagingService {
         channelDescription: 'Default channel description',
         importance: Importance.max,
         priority: Priority.high,
-        icon: "ic_notification",
       ),
     );
 
