@@ -24,7 +24,7 @@ class ScanInstructions extends StatelessWidget {
         final translations = snapshot.data!;
 
         return Positioned(
-          bottom: 150,
+          bottom: 130,
           width: MediaQuery.of(context).size.width,
           child: Center(
             child: Text(

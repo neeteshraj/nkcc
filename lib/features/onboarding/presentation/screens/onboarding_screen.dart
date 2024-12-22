@@ -172,7 +172,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                               translations['scan_to_add_product'] ?? "Scan to Add Product",
                                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                                 color: Colors.black,
-                                                fontWeight: FontWeight.bold,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
                                           ),
@@ -322,7 +322,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                             translations['enter_code_to_add_product'] ?? "Enter code to Add product",
                                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                               color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ),

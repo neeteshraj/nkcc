@@ -68,13 +68,13 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                     cursorColor: Colors.white,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                     decoration: InputDecoration(
                       hintText: translations['enterFullName'] ?? 'Enter full name',
                       hintStyle: const TextStyle(
                         color: Color.fromRGBO(255, 255, 255, 0.4),
-                        fontSize: 18,
+                        fontSize: 16,
                         height: 2.5,
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -105,13 +105,13 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                       cursorColor: Colors.white,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                       decoration: InputDecoration(
                         hintText: translations['enterEmailAddress'] ?? 'Enter email address',
                         hintStyle: const TextStyle(
                           color: Color.fromRGBO(255, 255, 255, 0.4),
-                          fontSize: 18,
+                          fontSize: 16,
                           height: 2.5,
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -154,13 +154,13 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                     focusNode: _passwordFocusNode,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                     decoration: InputDecoration(
                       hintText: translations['password'] ?? 'Enter password',
                       hintStyle: const TextStyle(
                         color: Color.fromRGBO(255, 255, 255, 0.4),
-                        fontSize: 18,
+                        fontSize: 16,
                         height: 2.5,
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -200,7 +200,7 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                     cursorColor: Colors.white,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                     maxLength: 10,
                     keyboardType: TextInputType.phone,
@@ -208,7 +208,7 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                       hintText: translations['enterPhoneNumber'] ?? 'Enter phone number',
                       hintStyle: const TextStyle(
                         color: Color.fromRGBO(255, 255, 255, 0.4),
-                        fontSize: 18,
+                        fontSize: 16,
                         height: 2.5,
                       ),
                       counterText: "",

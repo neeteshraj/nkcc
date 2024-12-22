@@ -10,7 +10,7 @@ class OnboardingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: SizeUtils.getPadding(context, 0.03, 0.07), // Reduced vertical padding
+      padding: SizeUtils.getPadding(context, 0.01, 0.07),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -80,8 +80,8 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.delegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: LocaleUtils.getCurrentLocale(),
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme(context),
+      darkTheme: AppTheme.darkTheme(context),
       initialRoute: initialRoute,
       onGenerateRoute: Routes.generateRoute,
     );
