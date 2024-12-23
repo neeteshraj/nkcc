@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/features/create_account/presentation/bloc/create_account_cubit.dart';
+import 'package:support/features/create_account/presentation/bloc/create_account_state.dart';
 
 class ContinueButton extends StatefulWidget {
   final String translationKey;
   final Map<String, String> translations;
   final GlobalKey<FormState> inputFormKey;
-
 
   const ContinueButton({
     super.key,
@@ -22,7 +22,6 @@ class ContinueButton extends StatefulWidget {
 }
 
 class _ContinueButtonState extends State<ContinueButton> {
-
   @override
   void initState() {
     super.initState();
@@ -31,41 +30,59 @@ class _ContinueButtonState extends State<ContinueButton> {
   @override
   Widget build(BuildContext context) {
     final buttonText = widget.translations[widget.translationKey] ?? 'Complete';
-    final isPrivacyPolicyChecked =
-        context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked;
 
+    return BlocBuilder<CreateAccountCubit, CreateAccountState>(
+      builder: (context, state) {
+        final isPrivacyPolicyChecked = state.isPrivacyPolicyChecked ?? false;
+        final email = state.email ?? '';
+        final password = state.password ?? '';
+        final fullName = state.fullName ?? '';
 
-    return Padding(
-      padding: SizeUtils.getPadding(context, 0, 0.05),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            if (widget.inputFormKey.currentState!.validate()) {
-              FocusScope.of(context).unfocus();
-              print("Form submitted successfully!");
-              context.read<CreateAccountCubit>().submitForm();
-            } else {
-              print("Invalid email address or privacy policy not accepted!");
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14.0),
-            backgroundColor: AppColors.buttonBackground,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+        return Padding(
+          padding: SizeUtils.getPadding(context, 0, 0.05),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: isPrivacyPolicyChecked && email.isNotEmpty && password.isNotEmpty && fullName.isNotEmpty
+                  ? () {
+                if (widget.inputFormKey.currentState!.validate()) {
+                  FocusScope.of(context).unfocus();
+                  final createAccountCubit = context.read<CreateAccountCubit>();
+                  createAccountCubit.clearError();
+                  createAccountCubit.submitForm();
+                } else {
+                  print("Invalid email address or privacy policy not accepted!");
+                }
+              }
+                  : null,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.disabled)) {
+                      return AppColors.textSecondary;
+                    }
+                    return AppColors.buttonBackground;
+                  },
+                ),
+                padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 14.0)),
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                ),
+              ),
+              child: Text(
+                buttonText,
+                style: TextStyle(
+                  color: isPrivacyPolicyChecked && email.isNotEmpty && password.isNotEmpty && fullName.isNotEmpty ? Colors.black : Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ),
-          child: Text(
-            buttonText,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

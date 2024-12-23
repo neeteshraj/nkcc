@@ -4,4 +4,6 @@ class AppSecrets{
   static const String expiresIn="expiresIn";
   static const String generatedAt="generatedAt";
   static const String refreshExpiresIn="refreshExpiresIn";
+  static const String grantTypePassword="password";
+  static const String appUser = "user";
 }

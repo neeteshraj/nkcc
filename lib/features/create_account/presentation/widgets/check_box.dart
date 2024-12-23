@@ -51,7 +51,7 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> with Tick
   @override
   Widget build(BuildContext context) {
     final TextStyle baseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: FontWeight.w300,
       color: Colors.white,
     ) ?? const TextStyle(fontSize: 16);
@@ -71,7 +71,7 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> with Tick
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 18.0),
             child: SizedBox(
               height: widgetHeight,
               child: Center(
@@ -98,7 +98,7 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> with Tick
         final andText = translations['and'] ?? 'and';
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: SizedBox(
             height: widgetHeight,
             child: ScaleTransition(
@@ -111,8 +111,8 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> with Tick
                     child: StatefulBuilder(
                       builder: (context, setState) {
                         return SizedBox(
-                          height: 24,
-                          width: 24,
+                          height: 20,
+                          width: 20,
                           child: GestureDetector(
                             onTap: () {
                               bool currentValue = context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked;
@@ -131,7 +131,7 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> with Tick
                               child: context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked
                                   ? const Icon(
                                 Icons.check,
-                                size: 20,
+                                size: 15,
                                 color: Colors.black,
                               )
                                   : null,

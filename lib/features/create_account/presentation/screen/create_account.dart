@@ -27,8 +27,6 @@ class CreateAccountScreen extends StatelessWidget {
     final apiService = ApiService();
     GlobalKey<FormState> inputFormKey = GlobalKey<FormState>();
     GlobalKey<FormState> privacyPolicyFormKey = GlobalKey<FormState>();
-
-
     return BlocProvider(
         create: (_) => CreateAccountCubit(apiService: apiService),
         child: Scaffold(
@@ -51,7 +49,7 @@ class CreateAccountScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding:
-                        EdgeInsets.only(top: SizeUtils.getHeight(context, 0.1)),
+                    EdgeInsets.only(top: SizeUtils.getHeight(context, 0.1)),
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -77,7 +75,7 @@ class CreateAccountScreen extends StatelessWidget {
                             ),
                             SizedBox(
                                 height: SizeUtils.getHeight(context, 0.03)),
-                            PrivacyPolicyCheckbox(
+                            const PrivacyPolicyCheckbox(
                             ),
                             SizedBox(
                                 height: SizeUtils.getHeight(context, 0.03)),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/core/utils/validators.dart';
@@ -63,6 +62,9 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                   Padding(
                     padding: SizeUtils.getPadding(context, 0, 0.05),
                     child: TextField(
+                      onChanged: (value){
+                        context.read<CreateAccountCubit>().updateFullName(value);
+                      },
                       onTapOutside: (event) {
                         FocusScope.of(context).unfocus();
                       },
@@ -75,7 +77,7 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                       ),
                       decoration: InputDecoration(
                         hintText:
-                            translations['enterFullName'] ?? 'Enter full name',
+                        translations['enterFullName'] ?? 'Enter full name',
                         hintStyle: const TextStyle(
                           color: Color.fromRGBO(255, 255, 255, 0.4),
                           fontSize: 16,
@@ -105,7 +107,11 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                       controller: _emailController,
                       focusNode: _emailFocusNode,
                       onChanged: (value) {
-                        context.read<CreateAccountCubit>().updateEmail(value);
+                        final createAccountCubit = context.read<CreateAccountCubit>();
+                        createAccountCubit.updateEmail(value);
+                        if (createAccountCubit.state.errorMessage != null) {
+                          createAccountCubit.clearError();
+                        }
                       },
                       cursorColor: Colors.white,
                       style: const TextStyle(
@@ -129,11 +135,9 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                           borderSide: BorderSide(
                               color: AppColors.buttonBackground, width: 2),
                         ),
-                        errorText: !state.isEmailValid &&
-                                _emailController.text.isNotEmpty
-                            ? (translations['invalidEmail'] ??
-                                'Invalid email address')
-                            : null,
+                        errorText: state.errorMessage ?? (!state.isEmailValid && _emailController.text.isNotEmpty
+                            ? (translations['invalidEmail'] ?? 'Invalid email address')
+                            : null),
                         errorStyle: const TextStyle(
                           fontSize: 12,
                           color: Colors.red,
@@ -157,6 +161,9 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                   Padding(
                     padding: SizeUtils.getPadding(context, 0, 0.05),
                     child: TextField(
+                      onChanged: (value){
+                        context.read<CreateAccountCubit>().updatePassword(value);
+                      },
                       onTapOutside: (event) {
                         FocusScope.of(context).unfocus();
                       },
@@ -207,6 +214,9 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                   Padding(
                     padding: SizeUtils.getPadding(context, 0, 0.05),
                     child: TextFormField(
+                      onChanged: (value){
+                        context.read<CreateAccountCubit>().updatePhoneNumber(value);
+                      },
                       onTapOutside: (event) {
                         FocusScope.of(context).unfocus();
                       },
@@ -236,6 +246,10 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                         focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: AppColors.buttonBackground, width: 2),
+                        ),
+                        errorStyle: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.red,
                         ),
                       ),
                       textInputAction: TextInputAction.done,
