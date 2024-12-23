@@ -33,8 +33,8 @@ void main() async {
     return true;
   };
 
-  FirebaseMessagingService firebaseMessagingService = FirebaseMessagingService();
-  await firebaseMessagingService.initialize();
+  // FirebaseMessagingService firebaseMessagingService = FirebaseMessagingService();
+  // await firebaseMessagingService.initialize();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
