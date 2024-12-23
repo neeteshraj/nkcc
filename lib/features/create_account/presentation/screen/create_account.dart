@@ -25,78 +25,73 @@ class CreateAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiService = ApiService();
+
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final billNumbers = (arguments?["billNumber"] as String?)?.split(',') ?? [];
+
+    print('billNumbers: $billNumbers');
+
     GlobalKey<FormState> inputFormKey = GlobalKey<FormState>();
-    GlobalKey<FormState> privacyPolicyFormKey = GlobalKey<FormState>();
+
     return BlocProvider(
-        create: (_) => CreateAccountCubit(apiService: apiService),
-        child: Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: FutureBuilder<Map<String, String>>(
-            future: _loadTranslations(context),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+      create: (_) => CreateAccountCubit(apiService: apiService, billNumbers: billNumbers),
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: FutureBuilder<Map<String, String>>(
+          future: _loadTranslations(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              if (snapshot.hasError ||
-                  !snapshot.hasData ||
-                  snapshot.data!.isEmpty) {
-                return const Center(child: Text('Error loading translations'));
-              }
+            if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('Error loading translations'));
+            }
 
-              final translations = snapshot.data!;
-              return Stack(
-                children: [
-                  Padding(
-                    padding:
-                    EdgeInsets.only(top: SizeUtils.getHeight(context, 0.1)),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            top: SizeUtils.getHeight(context, 0.05)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TranslatedText(
-                              translationKey: 'letsCreateAccount',
+            final translations = snapshot.data!;
+            return Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: SizeUtils.getHeight(context, 0.1)),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: SizeUtils.getHeight(context, 0.05)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TranslatedText(
+                            translationKey: 'letsCreateAccount',
+                            translations: translations,
+                          ),
+                          SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                          DescriptionWidget(translations: translations),
+                          SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                          TextInputFieldsWidget(
+                            translations: translations,
+                            formKey: inputFormKey,
+                          ),
+                          SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                          const PrivacyPolicyCheckbox(),
+                          SizedBox(height: SizeUtils.getHeight(context, 0.03)),
+                          Padding(
+                            padding: EdgeInsets.only(top: SizeUtils.getHeight(context, 0.05)),
+                            child: ContinueButton(
                               translations: translations,
+                              inputFormKey: inputFormKey,
                             ),
-                            SizedBox(
-                                height: SizeUtils.getHeight(context, 0.03)),
-                            DescriptionWidget(
-                              translations: translations,
-                            ),
-                            SizedBox(
-                                height: SizeUtils.getHeight(context, 0.03)),
-                            TextInputFieldsWidget(
-                              translations: translations,
-                              formKey: inputFormKey,
-                            ),
-                            SizedBox(
-                                height: SizeUtils.getHeight(context, 0.03)),
-                            const PrivacyPolicyCheckbox(
-                            ),
-                            SizedBox(
-                                height: SizeUtils.getHeight(context, 0.03)),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: SizeUtils.getHeight(context, 0.05)),
-                              child: ContinueButton(
-                                translations: translations,
-                                inputFormKey: inputFormKey,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const CustomAppBar(),
-                ],
-              );
-            },
-          ),
-        ));
+                ),
+                const CustomAppBar(),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 }

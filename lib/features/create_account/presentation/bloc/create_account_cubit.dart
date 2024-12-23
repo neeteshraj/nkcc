@@ -4,15 +4,19 @@ import 'package:support/config/endpoints/endpoints.dart';
 import 'package:support/core/constants/app_secrets.dart';
 import 'package:support/core/network/api_service.dart';
 import 'package:support/core/utils/request_header_generator.dart';
+import 'package:support/core/utils/shared_preferences_helper.dart';
 import 'package:support/core/utils/validators.dart';
 import 'package:support/features/create_account/data/model/create_account_response_model.dart';
 import 'package:support/features/create_account/presentation/bloc/create_account_state.dart';
 
 class CreateAccountCubit extends Cubit<CreateAccountState> {
   final ApiService apiService;
-  final privacyPolicyKey = GlobalKey<FormState>();
+  final List<String> billNumbers;
 
-  CreateAccountCubit({required this.apiService}) : super(CreateAccountState());
+  CreateAccountCubit({
+    required this.apiService,
+    required this.billNumbers,
+  }) : super(CreateAccountState());
 
   void updateEmail(String email) {
     final isValid = validateEmail(email);
@@ -54,9 +58,11 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
         "grantType": AppSecrets.grantTypePassword,
         "fcmToken": "fasdfasdfasdfadfadsfasdf",
         "role": AppSecrets.appUser,
-        "billNumbers": ["10000011"],
+        "billNumbers": billNumbers,
       },
     };
+
+    print("Payload: $payload");
 
     try {
       final response = await apiService.post(Endpoints.register, data: payload);
@@ -67,21 +73,25 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
 
       if (createAccountResponse.responseHeader.statusCode == 'REG-200') {
         print("Success: ${createAccountResponse.responseHeader.responseDescription}");
+        final tokenInfo = createAccountResponse.response?.tokenInfo;
+        if (tokenInfo != null) {
+          await SharedPreferencesHelper.saveTokenData(tokenInfo);
+        }
         emit(state.copyWith(
           isSubmitting: false,
           isSuccess: true,
           response: createAccountResponse,
         ));
-      } else if(createAccountResponse.responseHeader.statusCode == 'REG-400' && createAccountResponse.responseHeader.responseTitle=="Conflicting Bill Numbers") {
-        print("Failure: ${createAccountResponse.responseHeader.responseDescription}");
+      } else if (createAccountResponse.responseHeader.statusCode == 'REG-400' &&
+          createAccountResponse.responseHeader.responseTitle == "Conflicting Bill Numbers") {
         emit(state.copyWith(
           isSubmitting: false,
           isSuccess: false,
           errorMessage: "Bill Number already registered with another account",
           response: createAccountResponse,
         ));
-      } else if(createAccountResponse.responseHeader.statusCode=="REG-400" && createAccountResponse.responseHeader.responseTitle=="Email Already Exists") {
-        print("Failure: ${createAccountResponse.responseHeader.responseDescription}");
+      } else if (createAccountResponse.responseHeader.statusCode == "REG-400" &&
+          createAccountResponse.responseHeader.responseTitle == "Email Already Exists") {
         emit(state.copyWith(
           isSubmitting: false,
           isSuccess: false,
@@ -89,7 +99,6 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
           response: createAccountResponse,
         ));
       } else {
-        print("Failure: ${createAccountResponse.responseHeader.responseDescription}");
         emit(state.copyWith(
           isSubmitting: false,
           isSuccess: false,
@@ -98,7 +107,6 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
         ));
       }
     } catch (error) {
-      print("Error: $error");
       emit(state.copyWith(
         isSubmitting: false,
         isSuccess: false,
@@ -107,5 +115,4 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
       ));
     }
   }
-
 }

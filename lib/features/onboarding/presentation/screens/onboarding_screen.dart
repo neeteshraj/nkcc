@@ -198,9 +198,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                                       if (state.errorMessage.contains("does not exist in the system")) {
                                                         _errorTextNotifier.value = state.errorMessage;
                                                       } else if (state.errorMessage.contains("No user is associated with the bill number")) {
-                                                        _controller.clear();
                                                         Navigator.of(context, rootNavigator: true).pop();
-                                                        Navigator.pushNamed(context, "/createaccount");
+                                                        Navigator.pushNamed(context, "/createaccount",arguments: {"billNumber": _controller.text});
+                                                        _controller.clear();
                                                       } else {
                                                         _errorTextNotifier.value = "An unexpected error occurred.";
                                                       }

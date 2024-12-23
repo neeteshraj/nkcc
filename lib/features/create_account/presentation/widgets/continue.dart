@@ -23,66 +23,80 @@ class ContinueButton extends StatefulWidget {
 
 class _ContinueButtonState extends State<ContinueButton> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final buttonText = widget.translations[widget.translationKey] ?? 'Complete';
 
-    return BlocBuilder<CreateAccountCubit, CreateAccountState>(
-      builder: (context, state) {
-        final isPrivacyPolicyChecked = state.isPrivacyPolicyChecked ?? false;
-        final email = state.email ?? '';
-        final password = state.password ?? '';
-        final fullName = state.fullName ?? '';
+    return BlocListener<CreateAccountCubit, CreateAccountState>(
+      listener: (context, state) {
+        if (state.isSuccess == true) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+      },
+      child: BlocBuilder<CreateAccountCubit, CreateAccountState>(
+        builder: (context, state) {
+          final isPrivacyPolicyChecked = state.isPrivacyPolicyChecked ?? false;
+          final email = state.email ?? '';
+          final password = state.password ?? '';
+          final fullName = state.fullName ?? '';
+          final isSubmitting = state.isSubmitting ?? false;
 
-        return Padding(
-          padding: SizeUtils.getPadding(context, 0, 0.05),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: isPrivacyPolicyChecked && email.isNotEmpty && password.isNotEmpty && fullName.isNotEmpty
-                  ? () {
-                if (widget.inputFormKey.currentState!.validate()) {
-                  FocusScope.of(context).unfocus();
-                  final createAccountCubit = context.read<CreateAccountCubit>();
-                  createAccountCubit.clearError();
-                  createAccountCubit.submitForm();
-                } else {
-                  print("Invalid email address or privacy policy not accepted!");
+          return Padding(
+            padding: SizeUtils.getPadding(context, 0, 0.05),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: isPrivacyPolicyChecked && email.isNotEmpty && password.isNotEmpty && fullName.isNotEmpty
+                    ? () {
+                  if (widget.inputFormKey.currentState!.validate()) {
+                    FocusScope.of(context).unfocus();
+                    final createAccountCubit = context.read<CreateAccountCubit>();
+                    createAccountCubit.clearError();
+                    createAccountCubit.submitForm();
+                  } else {
+                    print("Invalid email address or privacy policy not accepted!");
+                  }
                 }
-              }
-                  : null,
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                      (Set<WidgetState> states) {
-                    if (states.contains(WidgetState.disabled)) {
-                      return AppColors.textSecondary;
-                    }
-                    return AppColors.buttonBackground;
-                  },
+                    : null,
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return AppColors.textSecondary;
+                      }
+                      return AppColors.buttonBackground;
+                    },
+                  ),
+                  padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 14.0)),
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
                 ),
-                padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 14.0)),
-                shape: WidgetStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                child: isSubmitting
+                    ? const SizedBox(
+                  height: 24.0,
+                  width: 24.0,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2.5,
+                  ),
+                )
+                    : Text(
+                  buttonText,
+                  style: TextStyle(
+                    color: isPrivacyPolicyChecked && email.isNotEmpty && password.isNotEmpty && fullName.isNotEmpty
+                        ? Colors.black
+                        : Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-              child: Text(
-                buttonText,
-                style: TextStyle(
-                  color: isPrivacyPolicyChecked && email.isNotEmpty && password.isNotEmpty && fullName.isNotEmpty ? Colors.black : Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

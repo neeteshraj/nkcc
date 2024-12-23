@@ -37,7 +37,13 @@ class Routes {
       case qrcode:
         return MaterialPageRoute(builder: (context) => const QRCodeScreen());
       case createAccount:
-        return MaterialPageRoute(builder: (context) => const CreateAccountScreen());
+        final arguments = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (context) => const CreateAccountScreen(),
+          settings: RouteSettings(
+            arguments: arguments,
+          ),
+        );
       case privacyPolicy:
         return MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen());
       case termsOfUse:
