@@ -113,18 +113,29 @@ class _PrivacyPolicyCheckboxState extends State<PrivacyPolicyCheckbox> with Tick
                         return SizedBox(
                           height: 24,
                           width: 24,
-                          child: Checkbox(
-                            value: context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked,
-                            onChanged: (value) {
-                              context.read<CreateAccountCubit>().togglePrivacyPolicyCheckbox(value ?? false);
+                          child: GestureDetector(
+                            onTap: () {
+                              bool currentValue = context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked;
+                              context.read<CreateAccountCubit>().togglePrivacyPolicyCheckbox(!currentValue);
                               setState(() {});
                             },
-                            fillColor: WidgetStateProperty.all(Colors.white),
-                            checkColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1.5,
+                                ),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked
+                                  ? const Icon(
+                                Icons.check,
+                                size: 20,
+                                color: Colors.black,
+                              )
+                                  : null,
                             ),
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                         );
                       },

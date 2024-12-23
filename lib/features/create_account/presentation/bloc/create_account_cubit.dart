@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/config/endpoints/endpoints.dart';
 import 'package:support/core/network/api_service.dart';
@@ -8,6 +9,7 @@ import 'package:support/features/create_account/presentation/bloc/create_account
 
 class CreateAccountCubit extends Cubit<CreateAccountState> {
   final ApiService apiService;
+  final privacyPolicyKey = GlobalKey<FormState>();
 
   CreateAccountCubit({required this.apiService}) : super(CreateAccountState());
 
@@ -21,9 +23,6 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
   }
 
   Future<void> submitForm() async {
-    if (!state.isEmailValid || !state.isPrivacyPolicyChecked) {
-      return; // Early exit if the form is not valid
-    }
 
     emit(state.copyWith(isSubmitting: true, isSuccess: false, errorMessage: null));
 

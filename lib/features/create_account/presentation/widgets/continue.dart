@@ -4,20 +4,36 @@ import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/features/create_account/presentation/bloc/create_account_cubit.dart';
 
-class ContinueButton extends StatelessWidget {
+class ContinueButton extends StatefulWidget {
   final String translationKey;
   final Map<String, String> translations;
+  final GlobalKey<FormState> inputFormKey;
+
 
   const ContinueButton({
     super.key,
     required this.translations,
     this.translationKey = 'complete',
+    required this.inputFormKey,
   });
 
   @override
+  State<ContinueButton> createState() => _ContinueButtonState();
+}
+
+class _ContinueButtonState extends State<ContinueButton> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final buttonText = translations[translationKey] ?? 'Complete';
-    final isPrivacyPolicyChecked = context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked;
+    final buttonText = widget.translations[widget.translationKey] ?? 'Complete';
+    final isPrivacyPolicyChecked =
+        context.read<CreateAccountCubit>().state.isPrivacyPolicyChecked;
+
 
     return Padding(
       padding: SizeUtils.getPadding(context, 0, 0.05),
@@ -25,12 +41,8 @@ class ContinueButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            FocusScope.of(context).unfocus();
-            final state = context.read<CreateAccountCubit>().state;
-            print('Current email: ${state.email}, isValid: ${state.isEmailValid}');
-            print(isPrivacyPolicyChecked);
-
-            if (state.isEmailValid) {
+            if (widget.inputFormKey.currentState!.validate()) {
+              FocusScope.of(context).unfocus();
               print("Form submitted successfully!");
               context.read<CreateAccountCubit>().submitForm();
             } else {

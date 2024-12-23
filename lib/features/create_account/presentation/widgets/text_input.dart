@@ -9,8 +9,10 @@ import 'package:support/features/create_account/presentation/bloc/create_account
 
 class TextInputFieldsWidget extends StatefulWidget {
   final Map<String, String> translations;
+  final GlobalKey<FormState> formKey;
 
-  const TextInputFieldsWidget({super.key, required this.translations});
+  const TextInputFieldsWidget(
+      {super.key, required this.translations, required this.formKey});
 
   @override
   _TextInputFieldsWidgetState createState() => _TextInputFieldsWidgetState();
@@ -28,7 +30,6 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
   final FocusNode _phoneFocusNode = FocusNode();
 
   bool _isPasswordVisible = false;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -54,45 +55,49 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
         return SingleChildScrollView(
           child: Padding(
             padding: SizeUtils.getPadding(context, 0.01, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: SizeUtils.getPadding(context, 0, 0.05),
-                  child: TextField(
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    controller: _fullNameController,
-                    focusNode: _fullNameFocusNode,
-                    cursorColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: translations['enterFullName'] ?? 'Enter full name',
-                      hintStyle: const TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.4),
+            child: Form(
+              key: widget.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: SizeUtils.getPadding(context, 0, 0.05),
+                    child: TextField(
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      controller: _fullNameController,
+                      focusNode: _fullNameFocusNode,
+                      cursorColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 16,
-                        height: 2.5,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                      border: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      decoration: InputDecoration(
+                        hintText:
+                            translations['enterFullName'] ?? 'Enter full name',
+                        hintStyle: const TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 0.4),
+                          fontSize: 16,
+                          height: 2.5,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 2),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: AppColors.buttonBackground, width: 2),
+                        ),
                       ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.buttonBackground, width: 2),
-                      ),
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: () =>
+                          FocusScope.of(context).requestFocus(_emailFocusNode),
                     ),
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () => FocusScope.of(context).requestFocus(_emailFocusNode),
                   ),
-                ),
-                Padding(
-                  padding: SizeUtils.getPadding(context, 0, 0.05),
-                  child: Form(
-                    key: _formKey,
+                  Padding(
+                    padding: SizeUtils.getPadding(context, 0, 0.05),
                     child: TextFormField(
                       onTapOutside: (event) {
                         FocusScope.of(context).unfocus();
@@ -108,21 +113,26 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                         fontSize: 16,
                       ),
                       decoration: InputDecoration(
-                        hintText: translations['enterEmailAddress'] ?? 'Enter email address',
+                        hintText: translations['enterEmailAddress'] ??
+                            'Enter email address',
                         hintStyle: const TextStyle(
                           color: Color.fromRGBO(255, 255, 255, 0.4),
                           fontSize: 16,
                           height: 2.5,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
                         border: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.black, width: 2),
                         ),
                         focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.buttonBackground, width: 2),
+                          borderSide: BorderSide(
+                              color: AppColors.buttonBackground, width: 2),
                         ),
-                        errorText: !state.isEmailValid && _emailController.text.isNotEmpty
-                            ? (translations['invalidEmail'] ?? 'Invalid email address')
+                        errorText: !state.isEmailValid &&
+                                _emailController.text.isNotEmpty
+                            ? (translations['invalidEmail'] ??
+                                'Invalid email address')
                             : null,
                         errorStyle: const TextStyle(
                           fontSize: 12,
@@ -130,111 +140,123 @@ class _TextInputFieldsWidgetState extends State<TextInputFieldsWidget> {
                         ),
                       ),
                       textInputAction: TextInputAction.next,
-                      onEditingComplete: () => FocusScope.of(context).requestFocus(_passwordFocusNode),
+                      onEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(_passwordFocusNode),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return translations['emailRequired'] ?? 'Email is required';
+                          return translations['emailRequired'] ??
+                              'Email is required';
                         } else if (!validateEmail(value)) {
-                          return translations['invalidEmail'] ?? 'Invalid email address';
+                          return translations['invalidEmail'] ??
+                              'Invalid email address';
                         }
                         return null;
                       },
                     ),
                   ),
-                ),
-                Padding(
-                  padding: SizeUtils.getPadding(context, 0, 0.05),
-                  child: TextField(
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    cursorColor: Colors.white,
-                    obscureText: !_isPasswordVisible,
-                    controller: _passwordController,
-                    focusNode: _passwordFocusNode,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: translations['password'] ?? 'Enter password',
-                      hintStyle: const TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.4),
+                  Padding(
+                    padding: SizeUtils.getPadding(context, 0, 0.05),
+                    child: TextField(
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      cursorColor: Colors.white,
+                      obscureText: !_isPasswordVisible,
+                      controller: _passwordController,
+                      focusNode: _passwordFocusNode,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 16,
-                        height: 2.5,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                      border: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2),
-                      ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.buttonBackground, width: 2),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: Colors.white,
+                      decoration: InputDecoration(
+                        hintText: translations['password'] ?? 'Enter password',
+                        hintStyle: const TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 0.4),
+                          fontSize: 16,
+                          height: 2.5,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 2),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: AppColors.buttonBackground, width: 2),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: () =>
+                          FocusScope.of(context).requestFocus(_phoneFocusNode),
                     ),
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () => FocusScope.of(context).requestFocus(_phoneFocusNode),
                   ),
-                ),
-                // Phone Number Input Field
-                Padding(
-                  padding: SizeUtils.getPadding(context, 0, 0.05),
-                  child: TextFormField(
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    controller: _phoneController,
-                    focusNode: _phoneFocusNode,
-                    cursorColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                    maxLength: 10,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      hintText: translations['enterPhoneNumber'] ?? 'Enter phone number',
-                      hintStyle: const TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.4),
+                  // Phone Number Input Field
+                  Padding(
+                    padding: SizeUtils.getPadding(context, 0, 0.05),
+                    child: TextFormField(
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      controller: _phoneController,
+                      focusNode: _phoneFocusNode,
+                      cursorColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 16,
-                        height: 2.5,
                       ),
-                      counterText: "",
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                      border: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      maxLength: 10,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: translations['enterPhoneNumber'] ??
+                            'Enter phone number',
+                        hintStyle: const TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 0.4),
+                          fontSize: 16,
+                          height: 2.5,
+                        ),
+                        counterText: "",
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 2),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: AppColors.buttonBackground, width: 2),
+                        ),
                       ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.buttonBackground, width: 2),
-                      ),
+                      textInputAction: TextInputAction.done,
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return translations['phoneRequired'] ??
+                              'Phone number is required';
+                        } else if (!RegExp(r'^\+?[1-9]\d{1,14}$')
+                            .hasMatch(value)) {
+                          return translations['invalidPhone'] ??
+                              'Invalid phone number';
+                        }
+                        return null;
+                      },
                     ),
-                    textInputAction: TextInputAction.done,
-                    onEditingComplete: () {
-                      FocusScope.of(context).unfocus();
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return translations['phoneRequired'] ?? 'Phone number is required';
-                      } else if (!RegExp(r'^\+?[1-9]\d{1,14}$').hasMatch(value)) {
-                        return translations['invalidPhone'] ?? 'Invalid phone number';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
