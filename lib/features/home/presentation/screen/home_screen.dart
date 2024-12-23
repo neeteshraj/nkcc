@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:support/core/database/user/user_database_service.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/core/utils/translation_utils.dart';
 import 'package:support/features/home/presentation/widgets/top_bar.dart';
+import 'package:support/core/database/database_helper.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,6 +19,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final databaseHelper = DatabaseHelper();
+    final userDatabaseService = UserDatabaseService(databaseHelper: databaseHelper);
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: PreferredSize(
@@ -39,12 +44,12 @@ class HomeScreen extends StatelessWidget {
             }
 
             final translations = snapshot.data!;
-            // Directly pass the image URL here
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SafeArea(
                 child: TopBar(
                   translations: translations,
+                  userDatabaseService: userDatabaseService,
                 ),
               ),
             );

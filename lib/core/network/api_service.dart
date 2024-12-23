@@ -14,6 +14,10 @@ class ApiService {
     _dio.interceptors.add(RetryInterceptor(dio: _dio));
   }
 
+  void setAuthToken(String token) {
+    _dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
   Future<dynamic> get(String endpoint) async {
     try {
       final response = await _dio.get(endpoint);

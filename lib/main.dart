@@ -8,7 +8,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:support/config/routes/route_manager.dart';
 import 'package:support/config/routes/routes.dart';
 import 'package:support/core/constants/app_constants.dart';
-import 'package:support/core/firebase/firebase_messaging_service.dart';
 import 'package:support/core/localization/localization.dart';
 import 'package:support/core/theme/app_theme.dart';
 import 'package:support/core/utils/locale_utils.dart';
