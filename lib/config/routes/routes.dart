@@ -8,11 +8,13 @@ import 'package:support/features/products/presentation/screens/products_screen.d
 import 'package:support/features/profile/presentation/screens/profile_screen.dart';
 import 'package:support/features/qr_scan/presentation/screens/qr_screen.dart';
 import 'package:support/features/services/presentation/screens/services_screen.dart';
+import 'package:support/features/startup/presentation/screen/startup.dart';
 import 'package:support/features/terms_of_service/presentation/screen/terms_of_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 
 class Routes {
+  static const String startup ="/startup";
   static const String home = '/home';
   static const String onboarding = '/onboarding';
   static const String qrcode = "/qrcode";
@@ -26,14 +28,15 @@ class Routes {
   static final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // Log the navigation event
     _logNavigationEvent(settings.name);
 
     switch (settings.name) {
+      case startup:
+        return MaterialPageRoute(builder: (context) => const StartupScreen());
       case home:
         return MaterialPageRoute(builder: (context) => const CustomBottomTab(), settings: settings);
       case onboarding:
-        return MaterialPageRoute(builder: (context) => const OnboardingScreen());
+        return MaterialPageRoute(builder: (context)=> const OnboardingScreen());
       case qrcode:
         return MaterialPageRoute(builder: (context) => const QRCodeScreen());
       case createAccount:
@@ -59,7 +62,6 @@ class Routes {
     }
   }
 
-  // Function to log navigation event
   static Future<void> _logNavigationEvent(String? routeName) async {
     if (routeName != null) {
       await _analytics.logEvent(

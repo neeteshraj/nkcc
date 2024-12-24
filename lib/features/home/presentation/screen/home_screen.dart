@@ -1,68 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:support/core/database/user/user_database_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
-import 'package:support/core/utils/translation_utils.dart';
+import 'package:support/features/home/presentation/widgets/search_bar.dart';
 import 'package:support/features/home/presentation/widgets/top_bar.dart';
-import 'package:support/core/database/database_helper.dart';
+import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/translations_state.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  Future<Map<String, String>> _loadTranslations(BuildContext context) async {
-    try {
-      return await loadTranslations(context);
-    } catch (error) {
-      return {};
-    }
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController searchController = TextEditingController();
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final databaseHelper = DatabaseHelper();
-    final userDatabaseService = UserDatabaseService(databaseHelper: databaseHelper);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(SizeUtils.getHeight(context, 0.06)),
-        child: FutureBuilder<Map<String, String>>(
-          future: _loadTranslations(context),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: SafeArea(child: CircularProgressIndicator()),
-              );
-            }
-
-            if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: SafeArea(child: Text('Error loading translations')),
-              );
-            }
-
-            final translations = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: BlocBuilder<TranslationsCubit, TranslationsState>(
+          builder: (context, state) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: SafeArea(
-                child: TopBar(
-                  translations: translations,
-                  userDatabaseService: userDatabaseService,
-                ),
+                child: TopBar(),
               ),
             );
           },
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Text(
-            "Hello, Home Screen!",
-            style: TextStyle(fontSize: 24),
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            CustomSearchBar(
+              controller: searchController,
+              focusNode: _focusNode,
+              onSearchChanged: (query) {
+                debugPrint('Search query: $query');
+              },
+              onSettingsPressed: () {
+                debugPrint('Settings pressed');
+              },
+            ),
+            const SizedBox(height: 16),
+            const Expanded(
+              child: Center(
+                child: Text(
+                  "Hello, Home Screen!",
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

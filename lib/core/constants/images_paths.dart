@@ -17,4 +17,8 @@ class ImagesPaths {
   static const String profileActive = "assets/images/Profile_active.png";
   static const String service = "assets/images/Service.png";
   static const String serviceActive = "assets/images/Service_active.png";
+  static const String search = "assets/images/search.svg";
+  static const String filter = "assets/images/filter.svg";
+  static const String logo = "assets/images/logo.png";
+  static const String background = "assets/images/background.png";
 }

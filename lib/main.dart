@@ -8,11 +8,14 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:support/config/routes/route_manager.dart';
 import 'package:support/config/routes/routes.dart';
 import 'package:support/core/constants/app_constants.dart';
+import 'package:support/core/database/user/user_database_service.dart';
 import 'package:support/core/localization/localization.dart';
 import 'package:support/core/theme/app_theme.dart';
 import 'package:support/core/utils/locale_utils.dart';
+import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
 import 'core/dependency/init_dependencies.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -53,6 +56,12 @@ void main() async {
       BlocProvider<ProductCodeCubit>(
         create: (context) => serviceLocator<ProductCodeCubit>(),
       ),
+      BlocProvider<UserCubit>(
+        create: (context) => UserCubit(serviceLocator<UserDatabaseService>()),
+      ),
+      BlocProvider<TranslationsCubit>(
+        create: (context) => serviceLocator<TranslationsCubit>(),
+      ),
     ],
     child: MyApp(initialRoute: initialRoute),
   ));
@@ -81,7 +90,7 @@ class MyApp extends StatelessWidget {
       locale: LocaleUtils.getCurrentLocale(),
       theme: AppTheme.lightTheme(context),
       darkTheme: AppTheme.darkTheme(context),
-      initialRoute: initialRoute,
+      initialRoute: Routes.startup,
       onGenerateRoute: Routes.generateRoute,
     );
   }
