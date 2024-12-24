@@ -3,6 +3,8 @@ import 'package:support/core/database/database_helper.dart';
 import 'package:support/core/database/user/user_database_service.dart';
 import 'package:support/core/database/user/user_repository.dart';
 import 'package:support/core/network/api_service.dart';
+import 'package:support/features/home/data/repositories/product_repository.dart';
+import 'package:support/features/home/presentation/bloc/product_cubit.dart';
 import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
@@ -28,5 +30,10 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(() => TranslationsCubit());
 
   serviceLocator.registerLazySingleton(()=>StartUpUserCubit(apiService: ApiService()));
+
+  serviceLocator.registerLazySingleton<ProductCubit>(() => ProductCubit(serviceLocator<ProductRepository>()));
+
+  GetIt.instance.registerLazySingleton<ProductRepository>(() => ProductRepository(ApiService()));
+
 
 }

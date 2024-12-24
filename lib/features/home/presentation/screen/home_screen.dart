@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
+import 'package:support/features/home/presentation/widgets/deals_of_the_week.dart';
+import 'package:support/features/home/presentation/widgets/our_products.dart';
 import 'package:support/features/home/presentation/widgets/search_bar.dart';
 import 'package:support/features/home/presentation/widgets/top_bar.dart';
 import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
@@ -52,25 +54,29 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            CustomSearchBar(
-              controller: searchController,
-              focusNode: _focusNode,
-              onSearchChanged: (query) {
-                debugPrint('Search query: $query');
-              },
-              onSettingsPressed: () {
-                debugPrint('Settings pressed');
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: CustomSearchBar(
+                controller: searchController,
+                focusNode: _focusNode,
+                onSearchChanged: (query) {
+                  debugPrint('Search query: $query');
+                },
+                onSettingsPressed: () {
+                  debugPrint('Settings pressed');
+                },
+              ),
             ),
             const SizedBox(height: 16),
-            // Render the CategoryWidget here
-            const Expanded(
-              child: CategoryWidget(),
-            ),
-
+            const CategoryWidget(),
+            const SizedBox(height: 16),
+            const OurProductsWidget(),
+            const SizedBox(height: 16),
+            const DealsOfTheWeekWidget(),
           ],
         ),
       ),
+
     );
   }
 }

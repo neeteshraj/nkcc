@@ -12,6 +12,7 @@ import 'package:support/core/database/user/user_database_service.dart';
 import 'package:support/core/localization/localization.dart';
 import 'package:support/core/theme/app_theme.dart';
 import 'package:support/core/utils/locale_utils.dart';
+import 'package:support/features/home/presentation/bloc/product_cubit.dart';
 import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
@@ -65,7 +66,11 @@ void main() async {
       ),
       BlocProvider<StartUpUserCubit>(
         create: (context) => serviceLocator<StartUpUserCubit>(),
-      )
+      ),
+      // Add ProductCubit here
+      BlocProvider<ProductCubit>(
+        create: (context) => serviceLocator<ProductCubit>(),
+      ),
     ],
     child: MyApp(initialRoute: initialRoute),
   ));

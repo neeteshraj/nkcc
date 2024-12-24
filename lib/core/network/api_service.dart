@@ -18,12 +18,14 @@ class ApiService {
     _dio.options.headers['Authorization'] = 'Bearer $token';
   }
 
-  Future<dynamic> get(String endpoint) async {
+  Future<dynamic> get(String endpoint, {Map<String, dynamic>? queryParameters}) async {
     try {
-      final response = await _dio.get(endpoint);
+      final response = await _dio.get(
+        endpoint,
+        queryParameters: queryParameters,
+      );
       return response.data;
     } on DioException catch (e) {
-      print('Error fetching data: ${e.message}');
       throw Exception('Error: ${e.message}');
     }
   }
