@@ -8,6 +8,8 @@ import 'package:support/core/theme/app_colors.dart';
 import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
 import 'package:support/features/startup/presentation/bloc/translations_state.dart';
+import 'package:support/features/startup/presentation/bloc/user/user_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/user/user_state.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({
@@ -16,24 +18,31 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userState = context.read<UserCubit>().state;
-    if (userState is UserInitial || userState is UserError) {
-      context.read<UserCubit>().fetchUser(1);
-    }
+    // Trigger the fetchUser calls only when the state is initial or error
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userState = context.read<UserCubit>().state;
+      if (userState is UserInitial || userState is UserError) {
+        context.read<UserCubit>().fetchUser(1);
+      }
+
+      final startUpUserState = context.read<StartUpUserCubit>().state;
+      if (startUpUserState is StartUpUserInitial || startUpUserState is StartUpUserError) {
+        context.read<StartUpUserCubit>().fetchUser(1);
+      }
+    });
+
     return BlocBuilder<TranslationsCubit, TranslationsState>(
       builder: (context, translationsState) {
         final translations = translationsState.translations;
 
         return BlocBuilder<UserCubit, UserState>(
-          builder: (context, state) {
-
-            if (state is UserError) {
+          builder: (context, userState) {
+            if (userState is UserError) {
               return const Center(child: Text("Error fetching user information"));
             }
 
-            if (state is UserLoaded) {
-              final user = state.user;
-
+            if (userState is UserLoaded) {
+              final user = userState.user;
               final fullName = user['fullName'] ?? 'Guest';
               final firstName = fullName.split(' ').first;
               final profilePicture = user['profilePicture'];
@@ -41,11 +50,15 @@ class TopBar extends StatelessWidget {
               Uint8List? imageBytes;
               if (profilePicture != null && profilePicture.isNotEmpty) {
                 try {
-                  imageBytes = base64Decode(profilePicture);
+                  // Decode profile picture if it's not empty
+                  imageBytes = base64Decode(profilePicture.split(',').last);
                 } catch (e) {
                   LoggerUtils.logError('Error decoding profile picture: $e');
                 }
               }
+
+              // Log user details with the custom log string
+              LoggerUtils.logInfo('User Loaded: $user');
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,3 +129,4 @@ class TopBar extends StatelessWidget {
     );
   }
 }
+

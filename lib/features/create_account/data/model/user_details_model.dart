@@ -42,11 +42,11 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-      'email': email ?? '', // Default to an empty string if null
+      'email': email ?? '',
       'username': username ?? '',
       'fullName': fullName ?? '',
       'role': role ?? '',
-      'billNumbers': billNumbers?.join(',') ?? '', // Default to an empty string if null
+      'billNumbers': billNumbers?.join(',') ?? '',
       'fcmToken': fcmToken ?? '',
       'profilePicture': profilePicture ?? '',
     };

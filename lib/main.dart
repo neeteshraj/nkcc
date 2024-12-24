@@ -16,6 +16,7 @@ import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/user/user_cubit.dart';
 import 'core/dependency/init_dependencies.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -62,6 +63,9 @@ void main() async {
       BlocProvider<TranslationsCubit>(
         create: (context) => serviceLocator<TranslationsCubit>(),
       ),
+      BlocProvider<StartUpUserCubit>(
+        create: (context) => serviceLocator<StartUpUserCubit>(),
+      )
     ],
     child: MyApp(initialRoute: initialRoute),
   ));

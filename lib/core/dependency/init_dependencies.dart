@@ -7,6 +7,7 @@ import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/user/user_cubit.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -25,5 +26,7 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(() => UserCubit(serviceLocator<UserDatabaseService>()));
 
   serviceLocator.registerLazySingleton(() => TranslationsCubit());
+
+  serviceLocator.registerLazySingleton(()=>StartUpUserCubit(apiService: ApiService()));
 
 }

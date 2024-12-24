@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/config/logger/logger.dart';
 import 'package:support/config/routes/route_manager.dart';
 import 'package:support/core/constants/images_paths.dart';
-import 'package:support/features/home/presentation/bloc/user_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/user/user_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/user/user_state.dart';
 
 class StartupScreen extends StatefulWidget {
   const StartupScreen({super.key});
@@ -46,14 +47,7 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
   }
 
   Future<void> _fetchUserInfoAndNavigate() async {
-    context.read<UserCubit>().fetchUser(1);
-    await Future.delayed(const Duration(seconds: 2));
-
-    String initialRoute = await RouteManager.getInitialRoute();
-
-    if (mounted) {
-      Navigator.pushReplacementNamed(context, initialRoute);
-    }
+    context.read<StartUpUserCubit>().fetchUser(1);
   }
 
   @override
@@ -61,9 +55,15 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
     double screenWidth = MediaQuery.of(context).size.width;
     double imageSize = screenWidth * 0.3;
 
-    return BlocListener<UserCubit, UserState>(
-      listener: (context, state) {
-        if (state is UserError) {
+    return BlocListener<StartUpUserCubit, StartUpUserState>(
+      listener: (context, state) async {
+        if (state is StartUpUserLoaded || state is StartUpUserError) {
+          String initialRoute = await RouteManager.getInitialRoute();
+
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, initialRoute);
+          }
+        } else if (state is StartUpUserError) {
           LoggerUtils.logError("Error fetching user information");
         }
       },
@@ -98,3 +98,4 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
     );
   }
 }
+

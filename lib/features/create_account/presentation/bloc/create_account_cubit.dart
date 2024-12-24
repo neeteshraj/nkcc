@@ -149,5 +149,4 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
       ));
     }
   }
-
 }
