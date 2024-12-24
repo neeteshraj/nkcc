@@ -17,12 +17,12 @@ class StartUpUserCubit extends Cubit<StartUpUserState> {
       emit(StartUpUserLoading());
 
       final tokenInfo = await SharedPreferencesHelper.getTokenData();
-      if (tokenInfo != null) {
-        apiService.setAuthToken(tokenInfo.authToken);
-      } else {
+      if (tokenInfo == null) {
         emit(StartUpUserError(errorMessage: 'Auth token not found'));
         return;
       }
+
+      apiService.setAuthToken(tokenInfo.authToken);
 
       final response = await apiService.get(Endpoints.userDetail);
 
@@ -38,6 +38,7 @@ class StartUpUserCubit extends Cubit<StartUpUserState> {
       emit(StartUpUserError(errorMessage: e.toString()));
     }
   }
+
 
   Future<void> _saveUserToDatabase(User user) async {
     final userDatabaseService = UserDatabaseService(databaseHelper: DatabaseHelper());

@@ -21,4 +21,8 @@ class ImagesPaths {
   static const String filter = "assets/images/filter.svg";
   static const String logo = "assets/images/logo.png";
   static const String background = "assets/images/background.png";
+  static const String fire = "assets/images/fire.png";
+  static const String roPurifier = "assets/images/ro_purifier.jpg";
+  static const String uvPurifier = "assets/images/uv_purifier.jpg";
+  static const String ufPurifier = "assets/images/uf_purifier.jpg";
 }

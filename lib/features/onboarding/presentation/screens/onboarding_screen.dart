@@ -29,9 +29,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    final locale = Localizations.localeOf(context);
-    context.read<TranslationsCubit>().loadTranslationsFromCubit(locale);
   }
 
   @override
@@ -52,6 +49,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addObserver(this);
+    _initializeVideoController();
+    final locale = Localizations.localeOf(context);
+    context.read<TranslationsCubit>().loadTranslationsFromCubit(locale);
+  }
+
   void _initializeVideoController() {
     _videoController ??= VideoPlayerController.asset(VideoPaths.splashScreen)
         ..initialize().then((_) {
@@ -63,8 +69,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
-    _initializeVideoController();
-
     final locale = Localizations.localeOf(context).languageCode;
 
     return MultiBlocProvider(
@@ -120,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                               ),
                             ),
                           Container(
-                            color: Colors.black.withValues(alpha: 0.7),
+                            color: Colors.black.withOpacity(0.7),
                           ),
                           Positioned(
                             bottom: 0,
@@ -191,7 +195,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
                                                       _errorTextNotifier.value = state.errorMessage;
                                                     } else if (state.errorMessage.contains("No user is associated with the bill number")) {
                                                       Navigator.of(context, rootNavigator: true).pop();
-                                                      Navigator.pushNamed(context, "/createaccount",arguments: {"billNumber": _controller.text});
+                                                      Navigator.pushNamed(context, "/createaccount", arguments: {"billNumber": _controller.text});
                                                       _controller.clear();
                                                     } else {
                                                       _errorTextNotifier.value = "An unexpected error occurred.";
@@ -338,5 +342,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
     );
   }
 }
-
-

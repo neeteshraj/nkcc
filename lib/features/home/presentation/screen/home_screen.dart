@@ -6,6 +6,7 @@ import 'package:support/features/home/presentation/widgets/search_bar.dart';
 import 'package:support/features/home/presentation/widgets/top_bar.dart';
 import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
 import 'package:support/features/startup/presentation/bloc/translations_state.dart';
+import 'package:support/features/home/presentation/widgets/category.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: PreferredSize(
@@ -63,14 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const SizedBox(height: 16),
+            // Render the CategoryWidget here
             const Expanded(
-              child: Center(
-                child: Text(
-                  "Hello, Home Screen!",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
+              child: CategoryWidget(),
             ),
+
           ],
         ),
       ),

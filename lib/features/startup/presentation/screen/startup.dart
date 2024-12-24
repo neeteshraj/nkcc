@@ -86,6 +86,13 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
               _navigateToNextScreen();
             }
 
+            if (userState is StartUpUserError && userState.errorMessage == 'Auth token not found') {
+              // Token is not found, navigate to login screen or show setup screen
+              Future.delayed(Duration.zero, () {
+                Navigator.pushReplacementNamed(context, '/onboarding'); // Navigate to login or setup screen
+              });
+            }
+
             if (translationsState.hasError) {
               LoggerUtils.logError("Error loading translations");
             }
@@ -124,3 +131,4 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
     );
   }
 }
+

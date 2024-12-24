@@ -23,7 +23,6 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
-  // Timer for debouncing
   Timer? _debounce;
 
   @override
@@ -35,7 +34,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      widget.onSearchChanged(query); // Call onSearchChanged after debounce
+      widget.onSearchChanged(query); 
     });
   }
 
@@ -61,7 +60,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             child: TextField(
               controller: widget.controller,
               focusNode: widget.focusNode,
-              onChanged: _onSearchChanged, // Use debounced function
+              onChanged: _onSearchChanged,
               decoration: const InputDecoration(
                 hintText: 'Search...',
                 hintStyle: TextStyle(color: Colors.white54),
