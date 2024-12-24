@@ -25,11 +25,12 @@ class CreateAccountScreen extends StatelessWidget {
     print('billNumbers: $billNumbers');
 
     GlobalKey<FormState> inputFormKey = GlobalKey<FormState>();
+    final locale = Localizations.localeOf(context);
 
     return BlocProvider(
       create: (_) => CreateAccountCubit(apiService: apiService, billNumbers: billNumbers),
       child: BlocProvider(
-        create: (_) => TranslationsCubit()..loadTranslationsFromCubit(context),
+        create: (_) => TranslationsCubit()..loadTranslationsFromCubit(locale),
         child: Scaffold(
           backgroundColor: AppColors.backgroundColor,
           body: BlocBuilder<TranslationsCubit, TranslationsState>(

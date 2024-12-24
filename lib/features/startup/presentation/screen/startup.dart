@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/config/logger/logger.dart';
 import 'package:support/config/routes/route_manager.dart';
 import 'package:support/core/constants/images_paths.dart';
+import 'package:support/features/startup/presentation/bloc/translations_cubit.dart';
+import 'package:support/features/startup/presentation/bloc/translations_state.dart';
 import 'package:support/features/startup/presentation/bloc/user/user_cubit.dart';
 import 'package:support/features/startup/presentation/bloc/user/user_state.dart';
 
@@ -16,6 +18,7 @@ class StartupScreen extends StatefulWidget {
 class _StartupScreenState extends State<StartupScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _logoAnimation;
+  bool _hasFetchedData = false;
 
   @override
   void initState() {
@@ -37,7 +40,21 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
     ]).animate(_controller);
 
     _controller.repeat(reverse: true);
-    _fetchUserInfoAndNavigate();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_hasFetchedData) {
+      _hasFetchedData = true;
+      _fetchInitialData();
+    }
+  }
+
+  Future<void> _fetchInitialData() async {
+    final locale = Localizations.localeOf(context);
+    context.read<StartUpUserCubit>().fetchUser(1);
+    context.read<TranslationsCubit>().loadTranslationsFromCubit(locale);
   }
 
   @override
@@ -46,8 +63,11 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
     super.dispose();
   }
 
-  Future<void> _fetchUserInfoAndNavigate() async {
-    context.read<StartUpUserCubit>().fetchUser(1);
+  Future<void> _navigateToNextScreen() async {
+    String initialRoute = await RouteManager.getInitialRoute();
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, initialRoute);
+    }
   }
 
   @override
@@ -55,47 +75,52 @@ class _StartupScreenState extends State<StartupScreen> with SingleTickerProvider
     double screenWidth = MediaQuery.of(context).size.width;
     double imageSize = screenWidth * 0.3;
 
-    return BlocListener<StartUpUserCubit, StartUpUserState>(
-      listener: (context, state) async {
-        if (state is StartUpUserLoaded || state is StartUpUserError) {
-          String initialRoute = await RouteManager.getInitialRoute();
+    return BlocBuilder<StartUpUserCubit, StartUpUserState>(
+      builder: (context, userState) {
+        return BlocBuilder<TranslationsCubit, TranslationsState>(
+          builder: (context, translationsState) {
+            if (userState is StartUpUserLoaded &&
+                !translationsState.isLoading &&
+                !translationsState.hasError &&
+                translationsState.translations.isNotEmpty) {
+              _navigateToNextScreen();
+            }
 
-          if (mounted) {
-            Navigator.pushReplacementNamed(context, initialRoute);
-          }
-        } else if (state is StartUpUserError) {
-          LoggerUtils.logError("Error fetching user information");
-        }
-      },
-      child: Scaffold(
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(ImagesPaths.background),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Center(
-            child: AnimatedBuilder(
-              animation: _logoAnimation,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: _logoAnimation.value,
-                  child: Image.asset(
-                    ImagesPaths.logo,
-                    width: imageSize,
-                    height: imageSize,
-                    fit: BoxFit.contain,
+            if (translationsState.hasError) {
+              LoggerUtils.logError("Error loading translations");
+            }
+
+            return Scaffold(
+              body: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(ImagesPaths.background),
+                    fit: BoxFit.cover,
                   ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
+                ),
+                child: Center(
+                  child: AnimatedBuilder(
+                    animation: _logoAnimation,
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: _logoAnimation.value,
+                        child: Image.asset(
+                          ImagesPaths.logo,
+                          width: imageSize,
+                          height: imageSize,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
-

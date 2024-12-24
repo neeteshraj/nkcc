@@ -18,7 +18,6 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Trigger the fetchUser calls only when the state is initial or error
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userState = context.read<UserCubit>().state;
       if (userState is UserInitial || userState is UserError) {
@@ -50,15 +49,12 @@ class TopBar extends StatelessWidget {
               Uint8List? imageBytes;
               if (profilePicture != null && profilePicture.isNotEmpty) {
                 try {
-                  // Decode profile picture if it's not empty
                   imageBytes = base64Decode(profilePicture.split(',').last);
                 } catch (e) {
                   LoggerUtils.logError('Error decoding profile picture: $e');
                 }
               }
 
-              // Log user details with the custom log string
-              LoggerUtils.logInfo('User Loaded: $user');
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

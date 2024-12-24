@@ -26,8 +26,6 @@ class StartUpUserCubit extends Cubit<StartUpUserState> {
 
       final response = await apiService.get(Endpoints.userDetail);
 
-      print("User Details Response: $response");
-
       final userDetailsResponse = UserDetailsResponse.fromJson(response);
 
       if (userDetailsResponse.responseHeader.statusCode == 'USER-200') {

@@ -30,14 +30,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> with WidgetsBinding
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    context.read<TranslationsCubit>().loadTranslationsFromCubit(context);
+    final locale = Localizations.localeOf(context);
+    context.read<TranslationsCubit>().loadTranslationsFromCubit(locale);
   }
 
   @override
   void dispose() {
     _controller.dispose();
     _errorTextNotifier.dispose();
-    _videoController?.dispose();  // Dispose of the controller if initialized
+    _videoController?.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
