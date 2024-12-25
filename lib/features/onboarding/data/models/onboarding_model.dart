@@ -4,10 +4,10 @@ class OnboardingModel extends OnboardingEntity {
   final String imagePath;
 
   OnboardingModel({
-    required String title,
-    required String description,
+    required super.title,
+    required super.description,
     required this.imagePath,
-  }) : super(title: title, description: description);
+  });
 
   factory OnboardingModel.fromJson(Map<String, dynamic> json) {
     return OnboardingModel(

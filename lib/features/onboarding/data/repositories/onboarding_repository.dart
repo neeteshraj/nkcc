@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:support/config/logger/logger.dart';
 import 'package:support/features/onboarding/data/datasources/onboarding_data_source.dart';
 import 'package:support/features/onboarding/domain/entities/onboarding_entity.dart';
 
@@ -13,7 +14,7 @@ class OnboardingRepository {
 
       return models.map((model) => model.toEntity()).toList();
     } catch (e) {
-      print("Error in repository: $e");
+      LoggerUtils.logError("Error in repository: $e");
       throw Exception("Error fetching onboarding data: $e");
     }
   }
