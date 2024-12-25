@@ -4,6 +4,7 @@ import 'package:support/features/home/presentation/bloc/product_cubit.dart';
 import 'package:support/features/home/presentation/bloc/product_state.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class OurProductsWidget extends StatefulWidget {
   const OurProductsWidget({super.key});
@@ -31,37 +32,7 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Our Products",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "BebasNeue",
-                        color: AppColors.white,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        debugPrint("Show All pressed");
-                      },
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "BebasNeue",
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildHeader(),
               SizedBox(
                 height: cardHeight + 20,
                 child: ListView.builder(
@@ -96,36 +67,7 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Our Products",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "BebasNeue",
-                        color: AppColors.white),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      debugPrint("Show All pressed");
-                    },
-                    child: const Text(
-                      "See All",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "BebasNeue",
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildHeader(),
             SizedBox(
               height: cardHeight + 20,
               child: ListView.builder(
@@ -135,66 +77,12 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
                   final product = state.products[index];
                   return Padding(
                     padding: const EdgeInsets.all(4),
-                    child: Container(
-                      width: cardWidth,
-                      height: cardHeight,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(0),
-                        image: DecorationImage(
-                          image: NetworkImage(product.thumbnail),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.black.withOpacity(0.8),
-                                  Colors.black.withOpacity(0),
-                                ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            left: 10,
-                            right: 10,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.name,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20,
-                                    fontFamily: "BebasNeue",
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  "By ${product.brand}",
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                const SizedBox(height: 4),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: _buildProductCard(
+                      product.thumbnail,
+                      product.name,
+                      product.brand,
+                      cardWidth,
+                      cardHeight,
                     ),
                   );
                 },
@@ -203,6 +91,109 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Our Products",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              fontFamily: "BebasNeue",
+              color: AppColors.white,
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              debugPrint("Show All pressed");
+            },
+            child: const Text(
+              "See All",
+              style: TextStyle(
+                fontSize: 24,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w700,
+                fontFamily: "BebasNeue",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+ Widget _buildProductCard(
+      String thumbnail,
+      String name,
+      String brand,
+      double cardWidth,
+      double cardHeight,
+      ) {
+    return Container(
+      width: cardWidth,
+      height: cardHeight,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: CachedNetworkImageProvider(thumbnail),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: const LinearGradient(
+                colors: [
+                  Colors.black87,
+                  Colors.transparent,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            right: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    fontFamily: "BebasNeue",
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  "By $brand",
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
