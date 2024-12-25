@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/features/home/presentation/bloc/product_cubit.dart';
 import 'package:support/features/home/presentation/bloc/product_state.dart';
 import 'package:support/core/theme/app_colors.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class OurProductsWidget extends StatefulWidget {
   const OurProductsWidget({super.key});
@@ -27,7 +28,65 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Our Products",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "BebasNeue",
+                        color: AppColors.white,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        debugPrint("Show All pressed");
+                      },
+                      child: const Text(
+                        "See All",
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "BebasNeue",
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: cardHeight + 20,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5, // Display 5 skeleton placeholders
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: Container(
+                          width: cardWidth,
+                          height: cardHeight,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.shade300,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
         }
 
         if (state.errorMessage.isNotEmpty) {
@@ -48,8 +107,7 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                         fontFamily: "BebasNeue",
-                        color: AppColors.white
-                    ),
+                        color: AppColors.white),
                   ),
                   TextButton(
                     onPressed: () {
@@ -94,8 +152,8 @@ class _OurProductsWidgetState extends State<OurProductsWidget> {
                               borderRadius: BorderRadius.circular(0),
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.black.withValues(alpha: 0.8),
-                                  Colors.black.withValues(alpha: 0),
+                                  Colors.black.withOpacity(0.8),
+                                  Colors.black.withOpacity(0),
                                 ],
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
