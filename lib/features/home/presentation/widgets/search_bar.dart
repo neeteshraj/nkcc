@@ -45,7 +45,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       decoration: BoxDecoration(
         color: AppColors.backgroundColor,
         border: Border.all(color: AppColors.textSecondary),
-        borderRadius: BorderRadius.zero,
+        borderRadius: BorderRadius.circular(12.0), // Apply consistent border radius
       ),
       child: Row(
         children: [
@@ -67,6 +67,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 border: InputBorder.none,
               ),
               style: const TextStyle(color: Colors.white),
+              cursorColor: AppColors.white,
             ),
           ),
           IconButton(
@@ -81,4 +82,5 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       ),
     );
   }
+
 }

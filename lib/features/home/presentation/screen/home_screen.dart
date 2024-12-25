@@ -50,33 +50,49 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: CustomSearchBar(
-                controller: searchController,
-                focusNode: _focusNode,
-                onSearchChanged: (query) {
-                  debugPrint('Search query: $query');
-                },
-                onSettingsPressed: () {
-                  debugPrint('Settings pressed');
-                },
-              ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: CustomSearchBar(
+              controller: searchController,
+              focusNode: _focusNode,
+              onSearchChanged: (query) {
+                debugPrint('Search query: $query');
+              },
+              onSettingsPressed: () {
+                debugPrint('Settings pressed');
+              },
             ),
-            const SizedBox(height: 16),
-            const CategoryWidget(),
-            const SizedBox(height: 16),
-            const OurProductsWidget(),
-            const SizedBox(height: 16),
-            const DealsOfTheWeekWidget(),
-          ],
-        ),
-      ),
+          ),
 
+          // Scrollable content
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return const CategoryWidget();
+                  case 1:
+                    return const SizedBox(height: 16);
+                  case 2:
+                    return const OurProductsWidget();
+                  case 3:
+                    return const SizedBox(height: 16);
+                  case 4:
+                    return const DealsOfTheWeekWidget();
+                  case 5:
+                    return const SizedBox(height: 16);
+                  default:
+                    return const SizedBox();
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

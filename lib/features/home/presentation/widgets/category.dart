@@ -104,9 +104,9 @@ class _CategoryItemWidgetState extends State<CategoryItemWidget> {
         child: Card(
           color: AppColors.backgroundColor,
           elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-            side: BorderSide(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(
               color: AppColors.textSecondary,
               width: 1,
             ),
@@ -119,8 +119,8 @@ class _CategoryItemWidgetState extends State<CategoryItemWidget> {
                 ClipOval(
                   child: Image.asset(
                     widget.category.image,
-                    height: 45,
-                    width: 45,
+                    height: 50,
+                    width: 50,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -141,3 +141,4 @@ class _CategoryItemWidgetState extends State<CategoryItemWidget> {
     );
   }
 }
+
