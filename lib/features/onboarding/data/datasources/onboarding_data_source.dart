@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:support/config/logger/logger.dart';
 import 'package:support/core/constants/images_paths.dart';
 import 'dart:convert';
 import 'package:support/features/onboarding/data/models/onboarding_model.dart';
@@ -17,7 +18,7 @@ class OnboardingDataSource {
         ),
       ];
     } catch (e) {
-      print("Error loading onboarding data: $e");
+      LoggerUtils.logError("Error loading onboarding data: $e");
       throw Exception("Error loading onboarding data: $e");
     }
   }

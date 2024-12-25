@@ -16,7 +16,6 @@ class TranslatedText extends StatelessWidget {
     final translatedText = translations[translationKey] ?? translationKey;
 
     TextStyle headlineStyle = Theme.of(context).textTheme.headlineLarge?.copyWith(
-      fontSize: 48,
       color: Colors.white,
     ) ??
         const TextStyle(fontSize: 48);
@@ -46,7 +45,6 @@ class DescriptionWidget extends StatelessWidget {
         translations['createAccountDescription'] ?? 'Create your account to get started!';
 
     TextStyle descriptionStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
-      fontSize: 18,
       fontWeight: FontWeight.w300,
       color: Colors.white,
     ) ??

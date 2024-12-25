@@ -9,7 +9,7 @@ class LocaleUtils {
 
   static Future<Map<String, String>> loadTranslations(String locale) async {
     final String data =
-        await rootBundle.loadString('assets/translations/$locale.json');
+        await rootBundle.loadString('assets/lang/$locale.json');
     final Map<String, dynamic> translations = json.decode(data);
     return translations.map((key, value) => MapEntry(key, value.toString()));
   }

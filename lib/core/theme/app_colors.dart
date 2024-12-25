@@ -24,4 +24,8 @@ class AppColors {
   static const Color buttonBackground = Color(0xFF4DAFFF);
 
   static const Color backgroundColor = Color(0xFF0E1315);
+
+  static const Color white = Color(0xFFFFFFFF);
+
+  static const Color splashBg = Color(0xFFD4E4ED);
 }
