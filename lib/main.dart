@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
 import 'package:support/config/routes/route_manager.dart';
 import 'package:support/config/routes/routes.dart';
 import 'package:support/core/constants/app_constants.dart';
 import 'package:support/core/database/user/user_database_service.dart';
+import 'package:support/core/database/user/user_repository.dart';
 import 'package:support/core/localization/localization.dart';
+import 'package:support/core/network/api_service.dart';
 import 'package:support/core/theme/app_theme.dart';
 import 'package:support/core/utils/locale_utils.dart';
+import 'package:support/features/home/presentation/bloc/my_owned_products_cubit.dart';
 import 'package:support/features/home/presentation/bloc/product_cubit.dart';
 import 'package:support/features/home/presentation/bloc/user_cubit.dart';
 import 'package:support/features/onboarding/presentation/bloc/bill/product_code_cubit.dart';
@@ -50,29 +54,48 @@ void main() async {
   await initDependencies();
   final initialRoute = await RouteManager.getInitialRoute();
   FlutterNativeSplash.remove();
-  runApp(MultiBlocProvider(
+  runApp(MultiProvider(
     providers: [
-      BlocProvider<OnboardingCubit>(
-        create: (context) => serviceLocator<OnboardingCubit>(),
+      Provider<UserDatabaseService>(
+        create: (_) => serviceLocator<UserDatabaseService>(),
       ),
-      BlocProvider<ProductCodeCubit>(
-        create: (context) => serviceLocator<ProductCodeCubit>(),
+      Provider<UserRepository>(
+        create: (_) => serviceLocator<UserRepository>(),
       ),
-      BlocProvider<UserCubit>(
-        create: (context) => UserCubit(serviceLocator<UserDatabaseService>()),
+      Provider<ApiService>(
+        create: (_) => serviceLocator<ApiService>(),
       ),
-      BlocProvider<TranslationsCubit>(
-        create: (context) => serviceLocator<TranslationsCubit>(),
-      ),
-      BlocProvider<StartUpUserCubit>(
-        create: (context) => serviceLocator<StartUpUserCubit>(),
-      ),
-      // Add ProductCubit here
-      BlocProvider<ProductCubit>(
-        create: (context) => serviceLocator<ProductCubit>(),
-      ),
+      // Add any other non-BLoC dependencies here
     ],
-    child: MyApp(initialRoute: initialRoute),
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider<OnboardingCubit>(
+          create: (context) => serviceLocator<OnboardingCubit>(),
+        ),
+        BlocProvider<ProductCodeCubit>(
+          create: (context) => serviceLocator<ProductCodeCubit>(),
+        ),
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(serviceLocator<UserDatabaseService>()),
+        ),
+        BlocProvider<TranslationsCubit>(
+          create: (context) => serviceLocator<TranslationsCubit>(),
+        ),
+        BlocProvider<StartUpUserCubit>(
+          create: (context) => serviceLocator<StartUpUserCubit>(),
+        ),
+        BlocProvider<ProductCubit>(
+          create: (context) => serviceLocator<ProductCubit>(),
+        ),
+        BlocProvider<MyOwnedProductsCubit>(
+          create: (context) => MyOwnedProductsCubit(
+            apiService: serviceLocator<ApiService>(),
+            userRepository: serviceLocator<UserRepository>(),
+          ),
+        ),
+      ],
+      child: MyApp(initialRoute: initialRoute),
+    ),
   ));
 }
 

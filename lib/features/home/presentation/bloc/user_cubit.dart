@@ -16,7 +16,6 @@ class UserCubit extends Cubit<UserState> {
       _isFetching = true;
       emit(UserLoading());
       final user = await userDatabaseService.getUser(userId);
-      print("Hello");
       if (user != null) {
         emit(UserLoaded(user));
       } else {

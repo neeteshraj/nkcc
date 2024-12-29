@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:support/core/theme/app_colors.dart';
 import 'package:support/core/utils/size_utils.dart';
 import 'package:support/features/home/presentation/widgets/deals_of_the_week.dart';
+import 'package:support/features/home/presentation/widgets/my_owned_products.dart';
 import 'package:support/features/home/presentation/widgets/our_products.dart';
 import 'package:support/features/home/presentation/widgets/search_bar.dart';
 import 'package:support/features/home/presentation/widgets/top_bar.dart';
@@ -66,11 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // Scrollable content
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16.0),
-              itemCount: 6,
+              itemCount: 7,
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
@@ -85,6 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const DealsOfTheWeekWidget();
                   case 5:
                     return const SizedBox(height: 16);
+                  case 6:
+                    return const MyOwnedProductsWidget(userId: 1);
                   default:
                     return const SizedBox();
                 }

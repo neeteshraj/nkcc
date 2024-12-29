@@ -14,26 +14,40 @@ import 'package:support/features/startup/presentation/bloc/user/user_cubit.dart'
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
+  serviceLocator.registerLazySingleton<ApiService>(() => ApiService());
 
   serviceLocator.registerSingleton<OnboardingCubit>(OnboardingCubit());
 
-  serviceLocator.registerLazySingleton<ProductCodeCubit>(()=>ProductCodeCubit(ApiService()));
+  serviceLocator.registerLazySingleton<ProductCodeCubit>(
+        () => ProductCodeCubit(serviceLocator<ApiService>()),
+  );
 
   serviceLocator.registerLazySingleton(() => DatabaseHelper());
 
-  serviceLocator.registerLazySingleton(() => UserDatabaseService(databaseHelper: serviceLocator()));
+  serviceLocator.registerLazySingleton(
+        () => UserDatabaseService(databaseHelper: serviceLocator()),
+  );
 
-  serviceLocator.registerLazySingleton(() => UserRepository(userDatabaseService: serviceLocator()));
+  serviceLocator.registerLazySingleton(
+        () => UserRepository(userDatabaseService: serviceLocator()),
+  );
 
-  serviceLocator.registerLazySingleton(() => UserCubit(serviceLocator<UserDatabaseService>()));
+  serviceLocator.registerLazySingleton(
+        () => UserCubit(serviceLocator<UserDatabaseService>()),
+  );
 
   serviceLocator.registerLazySingleton(() => TranslationsCubit());
 
-  serviceLocator.registerLazySingleton(()=>StartUpUserCubit(apiService: ApiService()));
+  serviceLocator.registerLazySingleton(
+        () => StartUpUserCubit(apiService: serviceLocator<ApiService>()),
+  );
 
-  serviceLocator.registerLazySingleton<ProductCubit>(() => ProductCubit(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<ProductCubit>(
+        () => ProductCubit(serviceLocator<ProductRepository>()),
+  );
 
-  GetIt.instance.registerLazySingleton<ProductRepository>(() => ProductRepository(ApiService()));
-
+  serviceLocator.registerLazySingleton<ProductRepository>(
+        () => ProductRepository(serviceLocator<ApiService>()),
+  );
 
 }
