@@ -17,12 +17,12 @@ class ResponseHeader {
 
   factory ResponseHeader.fromJson(Map<String, dynamic> json) {
     return ResponseHeader(
-      status: json['status'] as int,
-      statusCode: json['statusCode'] as String,
-      requestId: json['requestId'] as String,
-      timeStamp: json['timeStamp'] as String,
-      responseTitle: json['responseTitle'] as String,
-      responseDescription: json['responseDescription'] as String,
+      status: json['status'] ?? 0,
+      statusCode: json['statusCode'] ?? '',
+      requestId: json['requestId'] ?? '',
+      timeStamp: json['timeStamp'] ?? '',
+      responseTitle: json['responseTitle'] ?? '',
+      responseDescription: json['responseDescription'] ?? '',
     );
   }
 }
@@ -52,15 +52,15 @@ class Specifications {
 
   factory Specifications.fromJson(Map<String, dynamic> json) {
     return Specifications(
-      dimensions: json['dimensions'] as String,
-      weight: json['weight'] as String,
-      capacity: json['capacity'] as String,
-      powerRating: json['powerRating'] as String,
-      filterStages: json['filterStages'] as int,
-      material: json['material'] as String,
-      features: List<String>.from(json['features']),
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      dimensions: json['dimensions'] ?? '',
+      weight: json['weight'] ?? '',
+      capacity: json['capacity'] ?? '',
+      powerRating: json['powerRating'] ?? '',
+      filterStages: json['filterStages'] ?? 0,
+      material: json['material'] ?? '',
+      features: List<String>.from(json['features'] ?? []),
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
     );
   }
 }
@@ -132,36 +132,36 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'] as String,
-      productTypeId: json['productTypeId'] as String,
-      name: json['name'] as String,
-      slug: json['slug'] as String,
-      brand: json['brand'] as String,
-      model: json['model'] as String,
-      category: json['category'] as String,
-      description: json['description'] as String,
-      specifications: Specifications.fromJson(json['specifications']),
-      compatibleParts: List<String>.from(json['compatibleParts']),
-      manualsAndResources: List<String>.from(json['manualsAndResources']),
-      certifications: List<String>.from(json['certifications']),
-      images: List<String>.from(json['images']),
-      price: json['price'] as double,
-      stock: json['stock'] as int,
-      discount: json['discount'] as int,
-      rating: json['rating'] as double,
-      reviews: json['reviews'] as int,
-      sold: json['sold'] as int,
-      warranty: json['warranty'] as int,
-      warrantyType: json['warrantyType'] as String,
-      warrantyDescription: json['warrantyDescription'] as String,
-      thumbnail: json['thumbnail'] as String,
-      cover: json['cover'] as String,
-      releaseDate: json['releaseDate'] as String,
-      status: json['status'] as String,
-      notes: json['notes'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
-      version: json['version'] as int,
+      id: json['_id'] ?? '',
+      productTypeId: json['productTypeId'] ?? '',
+      name: json['name'] ?? '',
+      slug: json['slug'] ?? '',
+      brand: json['brand'] ?? '',
+      model: json['model'] ?? '',
+      category: json['category'] ?? '',
+      description: json['description'] ?? '',
+      specifications: Specifications.fromJson(json['specifications'] ?? {}),
+      compatibleParts: List<String>.from(json['compatibleParts'] ?? []),
+      manualsAndResources: List<String>.from(json['manualsAndResources'] ?? []),
+      certifications: List<String>.from(json['certifications'] ?? []),
+      images: List<String>.from(json['images'] ?? []),
+      price: (json['price'] ?? 0).toDouble(),
+      stock: json['stock'] ?? 0,
+      discount: json['discount'] ?? 0,
+      rating: (json['rating'] ?? 0).toDouble(),
+      reviews: json['reviews'] ?? 0,
+      sold: json['sold'] ?? 0,
+      warranty: json['warranty'] ?? 0,
+      warrantyType: json['warrantyType'] ?? '',
+      warrantyDescription: json['warrantyDescription'] ?? '',
+      thumbnail: json['thumbnail'] ?? '',
+      cover: json['cover'] ?? '',
+      releaseDate: json['releaseDate'] ?? '',
+      status: json['status'] ?? '',
+      notes: json['notes'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      version: json['version'] ?? 0,
     );
   }
 }
@@ -211,30 +211,26 @@ class MyOwnedBillEntity {
 
   factory MyOwnedBillEntity.fromJson(Map<String, dynamic> json) {
     return MyOwnedBillEntity(
-      responseHeader: ResponseHeader.fromJson(json['responseHeader']),
-      response: MyBillResponse.fromJson(json['response']),
+      responseHeader: ResponseHeader.fromJson(json['responseHeader'] ?? {}),
+      response: MyBillResponse.fromJson(json['response'] ?? {}),
     );
   }
 
   MyOwnedBillEntity combine(MyOwnedBillEntity other) {
     return MyOwnedBillEntity(
-        responseHeader: responseHeader,
-        response: MyBillResponse(
-            productIds: [
-              ...response.productIds,
-              ...other.response.productIds
-            ],
-            productIdsAsString: [
-              ...response.productIdsAsString,
-              ...other.response.productIdsAsString
-            ],
-            productNames: [
-              ...response.productNames,
-              ...other.response.productNames
-            ],
-            billNumber: response.billNumber,
-            dateDispatched: response.dateDispatched,
-            customerName: response.customerName,
-            customerAddress: response.customerAddress));
+      responseHeader: responseHeader,
+      response: MyBillResponse(
+        productIds: [...response.productIds, ...other.response.productIds],
+        productIdsAsString: [
+          ...response.productIdsAsString,
+          ...other.response.productIdsAsString
+        ],
+        productNames: [...response.productNames, ...other.response.productNames],
+        billNumber: response.billNumber,
+        dateDispatched: response.dateDispatched,
+        customerName: response.customerName,
+        customerAddress: response.customerAddress,
+      ),
+    );
   }
 }

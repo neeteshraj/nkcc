@@ -79,6 +79,7 @@ class MyOwnedProductsCubit extends Cubit<MyOwnedProductsState> {
         };
 
         final response = await _apiService.post(Endpoints.myProducts, data: payload);
+        print("response of myProducts: $response");
         final products = MyOwnedBillEntity.fromJson(response);
 
         print("Fetched product: $products");  // Log individual product
