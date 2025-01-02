@@ -42,6 +42,9 @@ export default {
   justifyEnd: {
     justifyContent: 'flex-end',
   },
+  justifyEvenly:{
+    justifyContent: 'space-evenly',
+  },
   justifyStart: {
     justifyContent: 'flex-start',
   },
@@ -109,6 +112,27 @@ export default {
   },
   top20Percentage: {
     top: heightPercentToDp('20'),
+  },
+  top65Percentage: {
+    top: heightPercentToDp('65'),
+  },
+  top80Percentage: {
+    top: heightPercentToDp('80'),
+  },
+  top82Percentage: {
+    top: heightPercentToDp('82'),
+  },
+  top85Percentage: {
+    top: heightPercentToDp('85'),
+  },
+  top87Percentage: {
+    top: heightPercentToDp('87'),
+  },
+  top90Percentage: {
+    top: heightPercentToDp('90'),
+  },
+  top95Percentage: {
+    top: heightPercentToDp('95'),
   },
   width40: {
     width: 40,

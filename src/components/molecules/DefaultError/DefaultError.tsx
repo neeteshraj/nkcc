@@ -12,7 +12,7 @@ type Props = {
 
 function DefaultErrorScreen({ onReset = undefined }: Props) {
   const { colors, fonts, gutters, layout } = useTheme();
-  const { t } = useTranslation();
+  const { t } = useTranslation(["error_boundary"]);
   const { resetBoundary } = useErrorBoundary();
 
   return (
@@ -31,11 +31,11 @@ function DefaultErrorScreen({ onReset = undefined }: Props) {
         stroke={colors.red500}
         width={42}
       />
-      <Text style={[fonts.gray800, fonts.bold, fonts.size_16]}>
-        {t('error_boundary.title')}
+      <Text style={[fonts.white, fonts.bold, fonts.size_16]}>
+        {t('error_boundary:title')}
       </Text>
-      <Text style={[fonts.gray800, fonts.size_12, fonts.alignCenter]}>
-        {t('error_boundary.description')}
+      <Text style={[fonts.white, fonts.size_12, fonts.alignCenter]}>
+        {t('error_boundary:description')}
       </Text>
 
       {onReset && (
@@ -46,7 +46,7 @@ function DefaultErrorScreen({ onReset = undefined }: Props) {
           }}
         >
           <Text style={[fonts.gray800, fonts.size_16]}>
-            {t('error_boundary.cta')}
+            {t('error_boundary:cta')}
           </Text>
         </TouchableOpacity>
       )}

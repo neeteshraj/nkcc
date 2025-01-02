@@ -38,7 +38,7 @@ export default [
       'import/no-named-as-default-member': 0,
       'import/no-unresolved': 0,
       'import/order': 0,
-      'no-console': 2,
+      'no-console': 0,
       'no-const-assign': 2,
       'no-constant-binary-expression': 2,
       'no-extra-parens': [2, 'functions'],

@@ -49,7 +49,6 @@ function AssetByVariant({ extension = 'png', isLoading = false, path, paused = f
         const variantSource = fetchAsset(`${variant}/${path}`, extension);
         setAsset(variantSource);
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.warn(
           `Couldn't load the asset: ${path}.${extension} for the variant ${variant}, Fallback to default`,
           error,
@@ -57,7 +56,6 @@ function AssetByVariant({ extension = 'png', isLoading = false, path, paused = f
         setAsset(defaultSource);
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(`Couldn't load the asset: ${path}`, error);
     }
   }, [variant, extension, path]);

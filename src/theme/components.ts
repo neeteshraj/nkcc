@@ -3,6 +3,8 @@ import type { ComponentTheme } from '@/theme/types/theme';
 
 import { StyleSheet } from 'react-native';
 
+import { heightToDp, widthToDp } from '@/utilities';
+
 import { BebasNeue, Inter } from './fonts';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -19,6 +21,11 @@ export default ({
   return {
     absoluteFill: {
       ...StyleSheet.absoluteFillObject,
+    },
+    bebasNeueDescription: {
+      ...BebasNeue.bold,
+      ...fonts.size_32,
+      color: colors.white,
     },
     bebasNeueTitle: {
       ...BebasNeue.bold,
@@ -52,23 +59,37 @@ export default ({
       color: colors.white,
       textAlign: 'center',
     },
+    interDescription18UnAligned: {
+      ...Inter.regular,
+      ...fonts.size_18,
+      color: colors.white,
+    },
     interDescriptionBlack: {
       ...Inter.regular,
       ...fonts.size_16,
-      color: colors.gray800,
+      color: colors.black,
       textAlign: 'center',
+    },
+    interDescriptionUnAligned: {
+      ...Inter.regular,
+      ...fonts.size_16,
+      color: colors.white,
+    },
+    interErrorRed: {
+      ...Inter.regular,
+      ...fonts.size_12,
+      color: colors.red500,
     },
     overlay: {
       ...backgrounds.black80,
       ...StyleSheet.absoluteFillObject,
     },
-    overlayBackButton:{
+    overlayBackButton: {
       ...backgrounds.white80,
     },
     overlayPart: {
       ...backgrounds.black80,
     },
-    
     primaryButton: {
       backgroundColor: colors.primary,
       height: 55,
@@ -77,11 +98,30 @@ export default ({
       ...layout.fullWidth,
       ...borders.rounded_500,
     },
+    primaryCircle: {
+      backgroundColor: colors.primary,
+      height: heightToDp(55),
+      width: widthToDp(55),
+      ...layout.justifyCenter,
+      ...layout.itemsCenter,
+      ...borders.rounded_500,
+    },
+
     textButton: {
       height: 55,
       ...layout.justifyCenter,
       ...layout.itemsCenter,
       ...layout.fullWidth,
+    },
+    textButtoninterDescription: {
+      ...Inter.regular,
+      ...fonts.size_16,
+      color: colors.white,
+      textAlign: 'center',
+      textDecorationLine: 'underline',
+    },
+    textLeft: {
+      textAlign: 'left',
     },
   } as const satisfies AllStyle;
 };

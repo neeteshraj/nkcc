@@ -15,7 +15,7 @@ import AuthenticatedNavigator from '../AuthNav/AuthNav';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function ApplicationNavigator() {
-  const { navigationTheme, variant } = useTheme();
+  const { variant } = useTheme();
   const navigationRef = useNavigationContainerRef();
 
   return (
@@ -29,7 +29,7 @@ function ApplicationNavigator() {
             'Error while hiding bootsplash';
           });
 
-      }} ref={navigationRef} theme={navigationTheme}
+      }} ref={navigationRef}
       >
         <Stack.Navigator key={variant} screenOptions={{
           animation: 'fade',
