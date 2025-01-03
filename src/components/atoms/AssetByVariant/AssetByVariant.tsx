@@ -27,15 +27,13 @@ function AssetByVariant({ extension = 'png', isLoading = false, path, paused = f
   useEffect(() => {
     try {
       const fetchAsset = (basePath: string, fileExtension: string): number | string => {
-        return z
-          .custom<number | string>()
-          .parse(
-            extension === 'mp4'
-              ? videos(`./${basePath}.${fileExtension}`)
-              : extension === 'json'
-                ? lottie(`./${basePath}.${fileExtension}`)
-                : images(`./${basePath}.${fileExtension}`)
-          );
+        const asset = extension === 'mp4'
+          ? videos(`./${basePath}.${fileExtension}`)
+          : extension === 'json'
+            ? lottie(`./${basePath}.${fileExtension}`)
+            : images(`./${basePath}.${fileExtension}`);
+        console.log('Fetched Asset:', asset);
+        return z.custom<number | string>().parse(asset);
       };
 
       const defaultSource = fetchAsset(path, extension);

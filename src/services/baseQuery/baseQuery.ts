@@ -3,6 +3,7 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
+import type { RootState } from '@/store';
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
@@ -11,7 +12,11 @@ import { API_BASE_URL } from '@/config';
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
-    headers.set('Content-Type', 'application/json');
+    // headers.set('Content-Type', 'application/json');
+    const token = (getState() as RootState).user.tokenInfo?.authToken;
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
     return headers;
   },
 });
@@ -23,8 +28,6 @@ const baseQueryWithInterceptor: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   try {
     const result = await baseQuery(args, api, extraOptions);
-
-    console.log('Response:', result);
 
     if (result.error && result.error.status === 401) {
       console.error('Unauthorized request');

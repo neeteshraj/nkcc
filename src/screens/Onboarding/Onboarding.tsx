@@ -248,7 +248,7 @@ const Onboarding: FC = () => {
           <ButtonVariant
             disabled={codeInBill.length !== 8 || isLoading}
             onPress={() => navigateAction(Paths.CreateAccount)}
-            style={[components.primaryButton, gutters.marginVertical_12]}
+            style={[codeInBill.length !== 8 || isLoading ? components.disabledButton : components.primaryButton, gutters.marginVertical_12]}
           >
             {isLoading ? (
               <ActivityIndicator color={colors.background} size="small" />

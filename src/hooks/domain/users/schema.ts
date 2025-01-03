@@ -42,10 +42,23 @@ const ResponseBodySchema = z.object({
   user: UserSchema,
 });
 
+const UserDetailsResponseBodySchema = z.object({
+  user: UserSchema,
+})
+
+const UserDetailsSchema = z.object({
+  response: UserDetailsResponseBodySchema,
+  responseHeader: ResponseHeaderSchema,
+})
+
 const ApiResponseSchema = z.object({
   response: ResponseBodySchema,
   responseHeader: ResponseHeaderSchema,
 });
+
+export namespace UserDetailsResponseSpace {
+  export type UserDetailsResponse = z.infer<typeof UserDetailsSchema>;
+}
 
 export namespace UserResponseSpace {
   export type UserResponse = z.infer<typeof ApiResponseSchema>;

@@ -23,6 +23,7 @@ const colorsLight = {
   skeleton: '#A1A1A1',
   white: '#ffffff',
   white50: '#ffffff50',
+  white70: '#ffffff70',
   white80: '#ffffff80',
 } as const;
 
@@ -43,6 +44,7 @@ const colorsDark = {
   skeleton: '#A1A1A1',
   white: '#ffffff',
   white50: '#ffffff50',
+  white70: '#ffffff70',
   white80: '#ffffff80',
 } as const;
 
@@ -55,7 +57,7 @@ export const config = {
   backgrounds: colorsLight,
   borders: {
     colors: colorsLight,
-    radius: [0, 4, 16, 500],
+    radius: [0, 4, 8, 16, 500],
     widths: [1, 2],
   },
   colors: colorsLight,

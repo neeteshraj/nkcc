@@ -1,4 +1,13 @@
 {
+  "common": {
+    "welcomeBack": "Welcome Back,"
+  },
+  "bottomTab": {
+    "home": "Home",
+    "services": "Services",
+    "products": "Products",
+    "profile": "Profile"
+  },
   "onboarding": {
     "onboarding_title_1": "Easily manage your products",
     "onboarding_description_1": "Register your products and access maintenance and repair services in just a few taps.",
@@ -36,6 +45,10 @@
     "invalidEmail": "Invalid email address",
     "emailAlreadyExists": "Email Already Exists",
     "emailAlreadyExistsDescription": "This email address is already registered."
+  },
+  "home": {
+    "seeAll": "See All",
+    "by":"By"
   },
   "next": "Next",
   "skip": "Skip",

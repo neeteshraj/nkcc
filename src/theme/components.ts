@@ -22,10 +22,25 @@ export default ({
     absoluteFill: {
       ...StyleSheet.absoluteFillObject,
     },
+    bebasNeueBody: {
+      ...BebasNeue.bold,
+      ...fonts.size_18,
+      color: colors.white,
+    },
     bebasNeueDescription: {
       ...BebasNeue.bold,
       ...fonts.size_32,
       color: colors.white,
+    },
+    bebasNeueDescription26:{
+      ...BebasNeue.bold,
+      ...fonts.size_26,
+      color: colors.white,
+    },
+    bebasNeueDescription26White70:{
+      ...BebasNeue.bold,
+      ...fonts.size_26,
+      color: colors.white70,
     },
     bebasNeueTitle: {
       ...BebasNeue.bold,
@@ -71,6 +86,30 @@ export default ({
       color: colors.white,
       textAlign: 'center',
     },
+    interDescription12Primary: {
+      ...Inter.regular,
+      ...fonts.size_12,
+      color: colors.primary,
+      textAlign: 'center',
+    },
+    interDescription12white: {
+      ...Inter.regular,
+      ...fonts.size_12,
+      color: colors.white,
+      textAlign: 'left',
+    },
+    interDescription12white70: {
+      ...Inter.regular,
+      ...fonts.size_12,
+      color: colors.white70,
+      textAlign: 'center',
+    },
+    interDescription12white70Left: {
+      ...Inter.regular,
+      ...fonts.size_12,
+      color: colors.white70,
+      textAlign: 'left',
+    },
     interDescription14: {
       ...Inter.regular,
       ...fonts.size_14,
@@ -88,6 +127,11 @@ export default ({
       ...fonts.size_18,
       color: colors.white,
     },
+    interDescription24SemiBold: {
+      ...Inter.semiBold,
+      ...fonts.size_24,
+      color: colors.white,
+    },
     interDescriptionBlack: {
       ...Inter.regular,
       ...fonts.size_16,
@@ -98,6 +142,12 @@ export default ({
       ...Inter.regular,
       ...fonts.size_16,
       color: colors.white,
+    },
+    interDescriptionWhite70: {
+      ...Inter.regular,
+      ...fonts.size_16,
+      color: colors.white70,
+      textAlign: 'center',
     },
     interErrorRed: {
       ...Inter.regular,

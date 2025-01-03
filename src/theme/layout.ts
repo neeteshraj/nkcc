@@ -42,7 +42,7 @@ export default {
   justifyEnd: {
     justifyContent: 'flex-end',
   },
-  justifyEvenly:{
+  justifyEvenly: {
     justifyContent: 'space-evenly',
   },
   justifyStart: {
@@ -86,8 +86,17 @@ export default {
   bottom0: {
     bottom: 0,
   },
+  bottom10Percent: {
+    bottom: '10%',
+  },
+  bottom10Percentage: {
+    bottom: heightPercentToDp('10'),
+  },
   bottom20Percentage: {
     bottom: heightPercentToDp('20'),
+  },
+  height17Percentage: {
+    height: heightPercentToDp('17'),
   },
   height20Percentage: {
     height: heightPercentToDp('20'),
@@ -95,11 +104,20 @@ export default {
   height40: {
     height: 40,
   },
+  height45: {
+    height: 45,
+  },
+  height50: {
+    height: 50,
+  },
   height60Percent: {
     height: heightPercentToDp('60'),
   },
   left0: {
     left: 0,
+  },
+  left5Percentage: {
+    left: widthPercentToDp('5'),
   },
   relative: {
     position: 'relative',
@@ -136,6 +154,18 @@ export default {
   },
   width40: {
     width: 40,
+  },
+  width40Percentage: {
+    width: widthPercentToDp('40'),
+  },
+  width45: {
+    width: 45,
+  },
+  width50: {
+    width: 50,
+  },
+  width50Percentage: {
+    width: widthPercentToDp('50'),
   },
   width90Percentage: {
     width: widthPercentToDp('90'),
