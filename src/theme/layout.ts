@@ -15,6 +15,9 @@ export default {
   height150: {
     height: 150,
   },
+  height18: {
+    height: 18,
+  },
   height24: {
     height: 24,
   },
@@ -60,6 +63,9 @@ export default {
   width150: {
     width: 150,
   },
+  width18: {
+    width: 18,
+  },
   width24: {
     width: 24,
   },
@@ -94,6 +100,9 @@ export default {
   },
   bottom20Percentage: {
     bottom: heightPercentToDp('20'),
+  },
+  flexGrow0: {
+    flexGrow: 0,
   },
   height17Percentage: {
     height: heightPercentToDp('17'),

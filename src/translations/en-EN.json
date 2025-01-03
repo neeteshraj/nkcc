@@ -48,7 +48,8 @@
   },
   "home": {
     "seeAll": "See All",
-    "by":"By"
+    "by": "By",
+    "searchProduct": "Search Product"
   },
   "next": "Next",
   "skip": "Skip",

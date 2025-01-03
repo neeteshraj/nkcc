@@ -198,14 +198,6 @@ const CreateAccount: FC = () => {
                             returnKeyLabel='next'
                             returnKeyType='next'
                             selectionColor={colors.white}
-                            style={[
-                                backgrounds.background,
-                                borders.wBottom_1,
-                                borders.white50,
-                                gutters.paddingVertical_16,
-                                components.interDescription18UnAligned,
-                                components.textLeft,
-                            ]}
                             value={userPayload.email}
                         />
                         {formErrors.email && (

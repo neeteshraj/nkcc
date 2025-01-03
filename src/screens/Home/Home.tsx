@@ -14,6 +14,7 @@ import type { RootStackParamList } from '@/navigation/types';
 import { Paths } from '@/navigation/paths';
 import { productActions } from '@/store/slices';
 import { Skeleton } from '@rneui/themed';
+import ListHeader from './SectionHeader';
 
 const Home: FC = () => {
     const { t } = useTranslation(["home"]);
@@ -49,10 +50,12 @@ const Home: FC = () => {
             {
                 data: [uniqueProducts],
                 title: 'Our Products',
+                type: "ourProducts"
             },
             {
                 data: [uniqueProducts],
                 title: 'Deals of the Week',
+                type: "dealsOfTheWeek"
             },
         ];
     }, [uniqueProducts, isLoading, error]);
@@ -163,23 +166,12 @@ const Home: FC = () => {
         </View>
     );
 
-    if (isLoading) {
-        return (
-            <SafeScreen style={[backgrounds.background, gutters.paddingHorizontal_16]}>
-                <Skeleton
-                    animation="wave"
-                    height={40}
-                    LinearGradientComponent={LinearGradient}
-                    width={80}
-                />
-            </SafeScreen>
-        );
-    }
 
     return (
         <SafeScreen style={[backgrounds.background, gutters.paddingHorizontal_16]}>
             <SectionList
                 keyExtractor={(item, index) => `section-${index}`}
+                ListHeaderComponent={<ListHeader/>}
                 refreshControl={
                     <RefreshControl
                         colors={[colors.white]}
