@@ -32,12 +32,12 @@ export default ({
       ...fonts.size_32,
       color: colors.white,
     },
-    bebasNeueDescription26:{
+    bebasNeueDescription26: {
       ...BebasNeue.bold,
       ...fonts.size_26,
       color: colors.white,
     },
-    bebasNeueDescription26White70:{
+    bebasNeueDescription26White70: {
       ...BebasNeue.bold,
       ...fonts.size_26,
       color: colors.white70,
@@ -62,7 +62,7 @@ export default ({
       height: 250,
       width: 250,
     },
-    disabledButton:{
+    disabledButton: {
       backgroundColor: colors.gray100,
       height: 55,
       ...layout.justifyCenter,
@@ -70,7 +70,15 @@ export default ({
       ...layout.fullWidth,
       ...borders.rounded_500,
     },
-    errorText:{
+    errorButton: {
+      backgroundColor: colors.red500,
+      height: 55,
+      ...layout.justifyCenter,
+      ...layout.itemsCenter,
+      ...layout.fullWidth,
+      ...borders.rounded_500,
+    },
+    errorText: {
       color: colors.red500,
       ...fonts.size_12,
     },

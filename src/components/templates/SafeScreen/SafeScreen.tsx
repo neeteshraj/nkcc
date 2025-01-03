@@ -9,14 +9,14 @@ import { useTheme } from '@/theme';
 import { DefaultError } from '@/components/molecules';
 import { ErrorBoundary } from '@/components/organisms';
 import { AssetByVariant, ButtonVariant, TextByVariant } from '@/components/atoms';
-import type { RouteProp} from '@react-navigation/native';
+import type { RouteProp } from '@react-navigation/native';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths';
 import { useSelector } from '@/hooks';
 import type { RootState } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import type { RootScreenProps} from '@/navigation/types';
+import type { RootScreenProps } from '@/navigation/types';
 import { type RootStackParamList } from '@/navigation/types';
 
 type Props = PropsWithChildren<
@@ -36,8 +36,7 @@ const SafeScreen = <S extends keyof RootStackParamList>({
 
   const { t } = useTranslation(["common"]);
 
-  const { borders, components, layout, navigationTheme, variant } = useTheme();
-
+  const { borders, components, gutters,layout, navigationTheme, variant } = useTheme();
 
   const route = useRoute<RouteProp<RootStackParamList, S>>();
 
@@ -98,6 +97,15 @@ const SafeScreen = <S extends keyof RootStackParamList>({
             <ButtonVariant onPress={() => navigation.navigate(Paths.Profile)}>
               <Image source={{ uri: user?.profilePicture }} style={[layout.height50, layout.width50, borders.rounded_500]} />
             </ButtonVariant>
+          </Animated.View>
+        )}
+        {route.name === Paths.Profile && (
+          <Animated.View style={[layout.itemsCenter, layout.justifyCenter, animatedHeaderStyle]}>
+            <View style={[layout.itemsCenter, layout.justifyCenter, gutters.marginTop_12]}>
+              <Image source={{ uri: user?.profilePicture }} style={[layout.height80, layout.width80, borders.rounded_500]} />
+              <TextByVariant style={[components.interDescription24SemiBold, gutters.marginBottom_4, gutters.marginTop_20]}>{user?.fullName}</TextByVariant>
+              <TextByVariant style={[components.interDescriptionWhite70]}>{user?.email}</TextByVariant>
+            </View>
           </Animated.View>
         )}
         {isError ? <DefaultError onReset={onResetError} /> : children}

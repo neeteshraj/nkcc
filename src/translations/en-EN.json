@@ -54,6 +54,9 @@
     "underWarranty": "Under Warranty",
     "warrantyExpired": "Warranty Expired"
   },
+  "profile": {
+    "logout": "Logout"
+  },
   "next": "Next",
   "skip": "Skip",
   "get_started": "Get Started",
