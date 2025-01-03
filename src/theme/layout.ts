@@ -1,6 +1,11 @@
 import type { ViewStyle } from 'react-native';
 
-import { heightPercentToDp, widthPercentToDp } from '@/utilities';
+import {
+  heightPercentToDp,
+  heightToDp,
+  widthPercentToDp,
+  widthToDp,
+} from '@/utilities';
 
 export default {
   alignSelfCenter: {
@@ -12,6 +17,9 @@ export default {
   colReverse: {
     flexDirection: 'column-reverse',
   },
+  height100: {
+    height: heightToDp(100),
+  },
   height150: {
     height: 150,
   },
@@ -20,6 +28,12 @@ export default {
   },
   height24: {
     height: 24,
+  },
+  height64: {
+    height: heightToDp(64),
+  },
+  height80: {
+    height: heightToDp(80),
   },
   itemsCenter: {
     alignItems: 'center',
@@ -60,6 +74,9 @@ export default {
   rowReverse: {
     flexDirection: 'row-reverse',
   },
+  width100:{
+    width: widthToDp(100),
+  },
   width150: {
     width: 150,
   },
@@ -71,6 +88,12 @@ export default {
   },
   width5percentage: {
     width: widthPercentToDp('5'),
+  },
+  width64: {
+    width: widthToDp(64),
+  },
+  width80:{
+    width: widthToDp(80),
   },
   wrap: {
     flexWrap: 'wrap',

@@ -17,9 +17,10 @@ import {
 
 import { api } from '@/services';
 
-import { ProductReducer, UserReducer } from './slices';
+import { MyOwnProductReducer, ProductReducer, UserReducer } from './slices';
 
 const reducers = combineReducers({
+  myProducts: MyOwnProductReducer,
   products: ProductReducer,
   user: UserReducer,
   [api.reducerPath]: api.reducer,

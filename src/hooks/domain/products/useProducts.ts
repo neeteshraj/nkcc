@@ -1,11 +1,35 @@
 import type { ProductResponseSpace } from './schema';
+
 import { ENDPOINTS } from '@/config';
 import { api } from '@/services';
-import { productActions } from '@/store/slices';
+import { myOwnProductActions, productActions } from '@/store/slices';
 
 export const useProductsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getProductList: builder.query<ProductResponseSpace.ProductResponse, { limit: number; page: number }>({
+    getMyProducts: builder.query<ProductResponseSpace.ProductResponse, void>({
+      query: () => ({
+        method: 'GET',
+        url: ENDPOINTS.MY_OWNED_PRODUCTS,
+      }),
+      // eslint-disable-next-line perfectionist/sort-objects
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            myOwnProductActions.setMyProducts({
+              products: data.response,
+              responseHeader: data.responseHeader,
+            }),
+          );
+        } catch (error) {
+          console.error('Error fetching my products:', error);
+        }
+      },
+    }),
+    getProductList: builder.query<
+      ProductResponseSpace.ProductResponse,
+      { limit: number; page: number }
+    >({
       query: ({ limit, page }) => ({
         method: 'GET',
         url: `${ENDPOINTS.PRODUCTS}?page=${page}&limit=${limit}`,
@@ -19,13 +43,13 @@ export const useProductsApi = api.injectEndpoints({
               productActions.setProducts({
                 products: data.response,
                 responseHeader: data.responseHeader,
-              })
+              }),
             );
           } else {
             dispatch(
               productActions.appendProducts({
                 newProducts: data.response,
-              })
+              }),
             );
           }
         } catch (error) {
@@ -36,4 +60,4 @@ export const useProductsApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetProductListQuery } = useProductsApi;
+export const { useGetMyProductsQuery, useGetProductListQuery } = useProductsApi;

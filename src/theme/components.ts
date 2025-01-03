@@ -201,6 +201,12 @@ export default ({
       textAlign: 'center',
       textDecorationLine: 'underline',
     },
+    textButtoninterDescription12UnAligned: {
+      ...Inter.regular,
+      ...fonts.size_12,
+      color: colors.white,
+      textDecorationLine: 'underline',
+    },
     textButtoninterDescription14: {
       ...Inter.regular,
       ...fonts.size_14,

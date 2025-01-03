@@ -2,11 +2,11 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, Image, RefreshControl, SectionList, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeScreen } from '@/components/templates';
-import { useDispatch, useGetProductListQuery, useSelector } from '@/hooks';
+import { useDispatch, useGetMyProductsQuery, useGetProductListQuery, useSelector } from '@/hooks';
 import { useTheme } from '@/theme';
 import type { FC } from 'react';
 import type { RootState } from '@/store';
-import { ButtonVariant, TextByVariant } from '@/components/atoms';
+import { AssetByVariant, ButtonVariant, TextByVariant } from '@/components/atoms';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
@@ -30,7 +30,12 @@ const Home: FC = () => {
         page: currentPage,
     });
 
+    const { error: myProductsError, isLoading: myProductsIsLoading, refetch: refetchMyProducts } = useGetMyProductsQuery()
+
     const products = useSelector((state: RootState) => state.products.products);
+
+    const myOwnProducts = useSelector((state: RootState) => state.myProducts.products)
+
     const uniqueProducts = useMemo(() => {
         const seenIds = new Set();
         return products.filter((product) => {
@@ -42,23 +47,37 @@ const Home: FC = () => {
         });
     }, [products]);
 
+    const myOwnUniqueProducts = useMemo(() => {
+        const seenIds = new Set();
+        return myOwnProducts.filter((product) => {
+            if (seenIds.has(product._id)) {
+                return false;
+            }
+            seenIds.add(product._id);
+            return true;
+        });
+    }
+        , [myOwnProducts]);
+
     const sections = useMemo(() => {
-        if (!uniqueProducts || isLoading || error) {
+        if (!uniqueProducts || isLoading || error || !myOwnUniqueProducts || myProductsError || myProductsIsLoading) {
             return [];
         }
         return [
             {
                 data: [uniqueProducts],
                 title: 'Our Products',
-                type: "ourProducts"
             },
             {
                 data: [uniqueProducts],
                 title: 'Deals of the Week',
-                type: "dealsOfTheWeek"
             },
+            {
+                data: [myOwnUniqueProducts],
+                title: "Your Product",
+            }
         ];
-    }, [uniqueProducts, isLoading, error]);
+    }, [uniqueProducts, isLoading, error, myOwnUniqueProducts, myProductsError, myProductsIsLoading]);
 
     const handleLoadMore = useCallback(() => {
         if (isFetching) { return; }
@@ -82,61 +101,124 @@ const Home: FC = () => {
         setCurrentPage(1);
         refetch()
             .finally(() => setIsRefreshing(false));
-    }, [refetch]);
+        refetchMyProducts()
+            .finally(() => setIsRefreshing(false));
+    }, [refetch, refetchMyProducts]);
 
     const navToSpecificProduct = () => {
         navigation.navigate(Paths.ProductDetails);
     };
 
-    const renderHorizontalList = ({ item }: { item: typeof products }) => (
-        <FlatList
-            data={isLoading ? Array(10).fill(null) : item}
-            horizontal
-            keyExtractor={(product, index) => isLoading ? `skeleton-${index}` : `${product._id}-${index}`}
-            onScroll={({ nativeEvent }) => {
-                const { contentOffset, contentSize, layoutMeasurement } = nativeEvent;
-                const isHalfway = contentOffset.x > contentSize.width * 0.5 - layoutMeasurement.width;
-                if (isHalfway) { handleLoadMore(); }
-            }}
-            removeClippedSubviews={true}
-            renderItem={({ item: product }) => (
-                isLoading ? (
-                    <Skeleton
-                        animation="wave"
-                        height={140}
-                        LinearGradientComponent={LinearGradient}
-                        style={[gutters.marginRight_10]}
-                        width={190}
-                    />
-                ) : (
-                    <ButtonVariant onPress={navToSpecificProduct} style={[layout.row, gutters.marginRight_10]}>
-                        <View style={[layout.height17Percentage, layout.width50Percentage, borders.rounded_8]}>
-                            <Image
-                                resizeMethod="resize"
-                                resizeMode="stretch"
-                                source={{ uri: product.thumbnail }}
-                                style={[layout.fullWidth, layout.fullHeight, layout.overflowHidden, borders.rounded_8, layout.absolute]}
+    const renderHorizontalList = ({ item, section }: { item: typeof myOwnProducts | typeof products, section: { title: string } }) => {
+        if (section.title === "Our Products" || section.title === "Deals of the Week") {
+            return (
+
+                <FlatList
+                    data={isLoading ? Array(10).fill(null) : item}
+                    horizontal
+                    keyExtractor={(product, index) => isLoading ? `skeleton-${index}` : `${product._id}-${index}`}
+                    onScroll={({ nativeEvent }) => {
+                        const { contentOffset, contentSize, layoutMeasurement } = nativeEvent;
+                        const isHalfway = contentOffset.x > contentSize.width * 0.5 - layoutMeasurement.width;
+                        if (isHalfway) { handleLoadMore(); }
+                    }}
+                    removeClippedSubviews={true}
+                    renderItem={({ item: product }) => (
+                        isLoading ? (
+                            <Skeleton
+                                animation="wave"
+                                height={140}
+                                LinearGradientComponent={LinearGradient}
+                                style={[gutters.marginRight_10]}
+                                width={190}
                             />
-                            <View style={[layout.absolute, layout.bottom10Percent, layout.left5Percentage, layout.z10]}>
-                                <TextByVariant style={[components.bebasNeueBody]}>
-                                    {product.name}
-                                </TextByVariant>
-                                <TextByVariant style={[components.interDescription12white]}>
-                                    {t("home:by")}{" "}{product.brand}
-                                </TextByVariant>
+                        ) : (
+                            <ButtonVariant onPress={navToSpecificProduct} style={[layout.row, gutters.marginRight_10]}>
+                                <View style={[layout.height17Percentage, layout.width50Percentage, borders.rounded_8]}>
+                                    <Image
+                                        resizeMethod="resize"
+                                        resizeMode="stretch"
+                                        source={{ uri: product.thumbnail }}
+                                        style={[layout.fullWidth, layout.fullHeight, layout.overflowHidden, borders.rounded_8, layout.absolute]}
+                                    />
+                                    <View style={[layout.absolute, layout.bottom10Percent, layout.left5Percentage, layout.z10]}>
+                                        <TextByVariant style={[components.bebasNeueBody]}>
+                                            {product.name}
+                                        </TextByVariant>
+                                        <TextByVariant style={[components.interDescription12white]}>
+                                            {t("home:by")}{" "}{product.brand}
+                                        </TextByVariant>
+                                    </View>
+                                    <LinearGradient
+                                        colors={['transparent', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.4)']}
+                                        style={[layout.absolute, layout.left0, layout.bottom0, layout.right0, layout.height60Percent, borders.rounded_8]}
+                                    />
+                                </View>
+                            </ButtonVariant>
+                        )
+                    )}
+                    scrollEventThrottle={16}
+                    showsHorizontalScrollIndicator={false}
+                    style={[gutters.marginBottom_30]}
+                />
+
+            )
+        } else if (section.title === "Your Product") {
+            return (
+                <FlatList
+                    data={myProductsIsLoading ? Array(5).fill(null) : item}
+                    keyExtractor={(product, index) => myProductsIsLoading ? `skeleton-${index}` : `${product._id}-${index}`}
+                    removeClippedSubviews={true}
+                    renderItem={({ item: product }) => (
+                        myProductsIsLoading ? (
+                            <View style={[layout.row, gutters.marginBottom_12]}>
+                                <Skeleton
+                                    animation="wave"
+                                    height={100}
+                                    LinearGradientComponent={LinearGradient}
+                                    style={[gutters.marginRight_12, borders.rounded_8]}
+                                    width={100}
+                                />
+
+                                <Skeleton
+                                    animation="wave"
+                                    height={100}
+                                    LinearGradientComponent={LinearGradient}
+                                    style={[layout.flex_1, borders.rounded_8]}
+                                    width={"90%"}
+                                />
                             </View>
-                            <LinearGradient
-                                colors={['transparent', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.4)']}
-                                style={[layout.absolute, layout.left0, layout.bottom0, layout.right0, layout.height60Percent, borders.rounded_8]}
-                            />
-                        </View>
-                    </ButtonVariant>
-                )
-            )}
-            scrollEventThrottle={16}
-            showsHorizontalScrollIndicator={false}
-        />
-    );
+                        ) : (
+                            <ButtonVariant onPress={navToSpecificProduct} style={[layout.row, layout.itemsCenter, gutters.marginBottom_16, layout.justifyBetween]}>
+                                <Image
+                                    resizeMethod="resize"
+                                    resizeMode="stretch"
+                                    source={{ uri: product.thumbnail }}
+                                    style={[layout.height80, layout.width80, borders.rounded_8]}
+                                />
+
+                                <View style={[layout.flex_1, gutters.marginHorizontal_16, layout.justifyBetween, layout.itemsStart,]}>
+                                    <TextByVariant style={[components.interDescription12white70Left]}>{t("home:underWarranty")}</TextByVariant>
+                                    <TextByVariant style={[components.bebasNeueDescription26, gutters.marginTop_8, gutters.marginBottom_4]}>{product.name}</TextByVariant>
+                                    <ButtonVariant>
+                                        <TextByVariant style={[components.textButtoninterDescription12UnAligned]}>{t("home:viewDetails")}</TextByVariant>
+                                    </ButtonVariant>
+                                </View>
+                                <AssetByVariant
+                                    extension='png'
+                                    path="arrow_right"
+                                    style={[layout.height24, layout.width24]}
+                                />
+                            </ButtonVariant>
+                        )
+                    )}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
+                />
+            )
+        }
+        return null;
+    }
 
     const renderSectionHeader = ({ section: { title } }: { section: { title: string } }) => (
         <View style={[layout.row, layout.itemsCenter, layout.justifyBetween, gutters.marginVertical_16]}>
@@ -151,18 +233,20 @@ const Home: FC = () => {
                 <TextByVariant style={[components.bebasNeueDescription26]}>{title}</TextByVariant>
             )}
 
-            <ButtonVariant>
-                {isLoading ? (
-                    <Skeleton
-                        animation="wave"
-                        height={20}
-                        LinearGradientComponent={LinearGradient}
-                        width={80}
-                    />
-                ) : (
-                    <TextByVariant style={[components.bebasNeueDescription26White70]}>{t("home:seeAll")}</TextByVariant>
-                )}
-            </ButtonVariant>
+            {title !== "Your Product" && (
+                <ButtonVariant>
+                    {isLoading ? (
+                        <Skeleton
+                            animation="wave"
+                            height={20}
+                            LinearGradientComponent={LinearGradient}
+                            width={80}
+                        />
+                    ) : (
+                        <TextByVariant style={[components.bebasNeueDescription26White70]}>{t("home:seeAll")}</TextByVariant>
+                    )}
+                </ButtonVariant>
+            )}
         </View>
     );
 
@@ -171,7 +255,7 @@ const Home: FC = () => {
         <SafeScreen style={[backgrounds.background, gutters.paddingHorizontal_16]}>
             <SectionList
                 keyExtractor={(item, index) => `section-${index}`}
-                ListHeaderComponent={<ListHeader/>}
+                ListHeaderComponent={<ListHeader />}
                 refreshControl={
                     <RefreshControl
                         colors={[colors.white]}
@@ -182,7 +266,7 @@ const Home: FC = () => {
                     />
                 }
                 removeClippedSubviews={true}
-                renderItem={renderHorizontalList}
+                renderItem={({ item, section }) => renderHorizontalList({ item, section })}
                 renderSectionHeader={renderSectionHeader}
                 scrollEventThrottle={16}
                 sections={sections}

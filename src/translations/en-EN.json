@@ -49,7 +49,10 @@
   "home": {
     "seeAll": "See All",
     "by": "By",
-    "searchProduct": "Search Product"
+    "searchProduct": "Search Product",
+    "viewDetails": "View Details",
+    "underWarranty": "Under Warranty",
+    "warrantyExpired": "Warranty Expired"
   },
   "next": "Next",
   "skip": "Skip",

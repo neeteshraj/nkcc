@@ -81,3 +81,25 @@ export type ProductResponseType = z.infer<typeof responseSchema>;
 export namespace ProductResponseSpace {
   export type ProductResponse = z.infer<typeof responseSchema>;
 }
+
+const myOwnProductResponseHeaderSchema = z.object({
+  requestId: z.string(),
+  responseDescription: z.string(),
+  responseTitle: z.string(),
+  status: z.number(),
+  statusCode: z.string(),
+  timeStamp: z.string(),
+});
+
+const myOwnProductResponseSchema = z.object({
+  response: z.array(productSchema),
+  responseHeader: myOwnProductResponseHeaderSchema,
+});
+
+export type MyOwnProductResponseType = z.infer<
+  typeof myOwnProductResponseSchema
+>;
+
+export namespace MyOwnProductResponseSpace {
+  export type MyOwnProductResponse = z.infer<typeof myOwnProductResponseSchema>;
+}
