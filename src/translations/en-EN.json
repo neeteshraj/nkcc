@@ -33,7 +33,9 @@
     "phoneRequired": "Phone number is required",
     "invalidPhone": "Invalid phone number",
     "emailRequired": "Email is required",
-    "invalidEmail": "Invalid email address"
+    "invalidEmail": "Invalid email address",
+    "emailAlreadyExists": "Email Already Exists",
+    "emailAlreadyExistsDescription": "This email address is already registered."
   },
   "next": "Next",
   "skip": "Skip",

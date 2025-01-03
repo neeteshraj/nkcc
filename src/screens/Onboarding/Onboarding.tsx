@@ -86,12 +86,12 @@ const Onboarding: FC = () => {
         try {
           await reduxStorage.setItem(APP_SECRETS.ACCESS_TOKEN, data.response.tokenInfo.authToken);
           await reduxStorage.setItem(APP_SECRETS.REFRESH_TOKEN, data.response.tokenInfo.refreshToken);
-         navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: Paths.Authenticated }],
-          })
-         )
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: Paths.Authenticated }],
+            })
+          )
         } catch (error) {
           console.error("Error storing tokens:", error);
         }
@@ -107,7 +107,9 @@ const Onboarding: FC = () => {
       if (apiError.data.responseHeader.responseTitle === t("onboarding:userNotFound")) {
         bottomSheetModalRef.current?.dismiss();
         reset();
-        navigation.navigate(Paths.CreateAccount);
+        navigation.navigate(Paths.CreateAccount, {
+          billNumber: codeInBill
+        });
       }
     } else {
       console.error('Error:', error);
