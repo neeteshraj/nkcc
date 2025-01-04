@@ -15,9 +15,9 @@ import {persistor, storage, store} from '@/store';
 /**
  * @author Nitesh Raj Khanal
  * @function @Root
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
-const Root = (): JSX.Element => {
+const Root = (): React.JSX.Element => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>

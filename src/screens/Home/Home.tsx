@@ -117,6 +117,7 @@ const Home: FC = () => {
                     data={isLoading ? Array(10).fill(null) : item}
                     horizontal
                     keyExtractor={(product, index) => isLoading ? `skeleton-${index}` : `${product._id}-${index}`}
+                    nestedScrollEnabled
                     onScroll={({ nativeEvent }) => {
                         const { contentOffset, contentSize, layoutMeasurement } = nativeEvent;
                         const isHalfway = contentOffset.x > contentSize.width * 0.5 - layoutMeasurement.width;
@@ -168,6 +169,7 @@ const Home: FC = () => {
                 <FlatList
                     data={myProductsIsLoading ? Array(5).fill(null) : item}
                     keyExtractor={(product, index) => myProductsIsLoading ? `skeleton-${index}` : `${product._id}-${index}`}
+                    nestedScrollEnabled
                     removeClippedSubviews={true}
                     renderItem={({ item: product }) => (
                         myProductsIsLoading ? (

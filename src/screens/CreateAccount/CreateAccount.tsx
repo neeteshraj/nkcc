@@ -1,4 +1,4 @@
-import { ButtonVariant, InputVariant, TextByVariant } from '@/components/atoms';
+import { ButtonVariant, InputVariant, InputWithIconVariant, TextByVariant } from '@/components/atoms';
 import { Checkbox } from '@/components/molecules';
 import { SafeScreen } from '@/components/templates';
 import type { ApiError } from '@/hooks';
@@ -198,6 +198,14 @@ const CreateAccount: FC = () => {
                             returnKeyLabel='next'
                             returnKeyType='next'
                             selectionColor={colors.white}
+                            style={[
+                                backgrounds.background,
+                                borders.wBottom_1,
+                                borders.white50,
+                                gutters.paddingVertical_16,
+                                components.interDescription18UnAligned,
+                                components.textLeft,
+                            ]}
                             value={userPayload.email}
                         />
                         {formErrors.email && (
@@ -238,9 +246,10 @@ const CreateAccount: FC = () => {
                     </View>
 
                     <View style={[gutters.paddingHorizontal_12, gutters.marginBottom_24]}>
-                        <InputVariant
+                        <InputWithIconVariant
                             autoCapitalize="none"
                             cursorColor={colors.white}
+                            direction='right'
                             onChangeText={(text) => updateUserPayload({ password: text })}
                             onFocus={() => setFormErrors((prev) => ({ ...prev, password: '' }))}
                             onSubmitEditing={() => phoneNumberRef.current?.focus()}
@@ -252,10 +261,8 @@ const CreateAccount: FC = () => {
                             secureTextEntry
                             selectionColor={colors.white}
                             style={[
-                                backgrounds.background,
-                                borders.wBottom_1,
-                                borders.white50,
-                                gutters.paddingVertical_16,
+                                layout.flex_1,
+                                gutters.marginRight_10,
                                 components.interDescription18UnAligned,
                                 components.textLeft,
                             ]}
